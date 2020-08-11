@@ -1,0 +1,118 @@
+---
+  0x00:
+    0x00: Current Area
+    0x06: Eternal Loading Screen
+    0x07: Weird Pillar Place
+    0x10: Item Dev Room
+    0x11: Item Dev Room with Cloud Overlaid
+    0x20: Dev Area
+    0x21: Dev Area with Animals
+    0x30: Dev Area with Wheel Fights
+    0x31: Dev Area with Bull Fights
+    0x32: Dev Area with Cloud Overlaid
+    0x33: Dev Area with Cloud Overlaid
+    0x34: Dev Area with Blue Wall
+    0xff: Super Cool Dev Area
+  0x01:
+    0x00: Kamiki Village (Game Start)
+    0x01: Cave of Nagi
+    0x02: Kamiki Village
+    0x03: Hana Valley
+    0x04: Tsuta Ruins
+    0x05: City Checkpoint
+    0x06: Spider Queen Arena
+    0x07: Gale Shrine
+    0x08: Kusa Village
+    0x09: Sasa Sanctuary
+    0x0a: Agata Forest - Madame Fawn's
+    0x0b: Digging Game
+    0x0c: Dojo Learning Room
+    0x0d: Crimson Helm Arena
+    0x0e: Calcified Cavern
+    0x10: Moon Cavern
+    0x11: Orochi Arena
+    0x12: Kamiki Village (Post-Full Moon)
+    0x13: Ryoshima Coast Spider Queen Grotto
+    0x14: Taka Pass - Moley's Treasure Trove
+    0x15: Kamui - Cherry Bomb 3 Grotto
+    0x16: North Ryoshima Coast - Power Slash 2 Grotto
+    0x17: North Ryoshima Coast - Cherry Bomb 2 Grotto
+    0x18: Kamui (Ezofuji) - Power Slash 3 Grotto
+    0x19: Kamui - Blockhead Grotto
+    0x1a: North Ryoshima Coast Spider Queen Grotto
+    0x1b: Kamui Spider Queen Grotto
+    0x1c: Dragon Palace Grotto Under Stairs
+    0x1d: North Ryoshima Coast Grotto Near Yoichi
+    0x20: New Game
+    0x21: Broken Kamiki Village
+    0x22: River of the Heavens
+  0x02:
+    0x00: Sei'an Aristocratic Quarter
+    0x01: Sei'an Commoner's Quarter
+    0x02: Himiko's Palace
+    0x03: Dragon Palace
+    0x04: Inside the Dragon
+    0x05: Sunken Ship
+    0x06: Imperial Palace Entry
+    0x07: Imperial Palace
+    0x08: Lower Oni Island (Before Platforming)
+    0x09: Ninetails Arena
+    0x0a: Catcall Tower
+    0x0b: Inside the Emperor
+    0x0c: Sei'an Commoner's Quarter - Kimono Shop
+    0x0d: Oni Island Entry
+    0x0e: Upper Oni Island (After Platforming)
+    0x0f: Oni Island Platforming
+  0x03:
+    0x01: Wep'keer
+    0x02: Kamiki Village (Past)
+    0x03: Wawku Shrine
+    0x04: Nechku Arena
+    0x05: Ponc'tan
+    0x06: Moon Cave Entry (Past)
+    0x07: Ark of Yamato
+    0x08: Spider Queen Arena (Ark)
+    0x09: Orochi Arena (Ark)
+    0x0a: Blight Arena (Ark)
+    0x0b: Ninetails Arena (Ark)
+    0x0c: Crimson Helm Arena (Ark)
+    0x0d: Ponc'tan - Mrs. Seal's Home
+    0x10: Yoshpet
+    0x11: Inner Yoshpet
+    0x12: Yami Arena
+    0x13: Wep'keer Square
+    0x14: Lechku and Nechku Arena
+  0x0f:
+    0x01: Shinshu Field (Cursed)
+    0x02: Shinshu Field (Healed)
+    0x03: Agata Forest (Cursed)
+    0x04: Agata Forest (Healed)
+    0x06: Moon Cave Entrance
+    0x07: Taka Pass (Cursed)
+    0x08: Taka Pass (Healed)
+    0x09: Ryoshima Coast (Cursed)
+    0x0a: Ryoshima Coast (Healed)
+    0x0c: North Ryoshima Coast
+    0x11: Kamui (Cursed)
+    0x12: Kamui (Healed)
+    0x13: Kamui (Ezofuji)
+    0x20: Shinshu Field (Past)
+    0x21: Moon Cave Entrance (Past)
+  0x0c:
+    0x00: Starting Screen
+    0x02: Media Menu
+  0x0d:
+    0x00: Broken Shinshu Field?
+    0x01: Broken Hana Valley?
+    0x02: Broken - Fell Forever
+    0x03: Broken Agata?
+    0x04: Broken Ryoshima Coast?
+    0x05: Crashed
+    0x06: Broken Taka Pass?
+    0x07: Broken Kusa Village?
+  0x0e:
+    0x00: Sei'an City Bridge Fishing
+    0x01: Sei'an Aristocratic Quarter Fishing
+    0x02: Agata Forest Fishing
+    0x03: Kamui Fishing
+    0x04: North Ryoshima Coast Fishing

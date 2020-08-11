@@ -1,0 +1,257 @@
+---
+ 0x00: Empty
+ 0x01: Spirit Globe S
+ 0x02: Spirit Globe M
+ 0x03: Spirit Globe L
+ 0x04: Holy Bone L
+ 0x05: Sun Fragment
+ 0x06: Astral Pouch
+ 0x07: Ink Pot
+ 0x08: Exorcism Slip L
+ 0x09: Exorcism Slip M
+ 0x0a: Exorcism Slip S
+ 0x0b: Peace Bell
+ 0x0c: Vengeance Slip
+ 0x0d: Inkfinity Stone
+ 0x0e: Mermaid Coin
+ 0x0f: Golden Peach
+ 0x10: Divine Retribution
+ 0x11: Snarling Beast
+ 0x12: Infinity Judge
+ 0x13: Trinity Mirror
+ 0x14: Solar Flare
+ 0x15: Devout Beads
+ 0x16: Life Beads
+ 0x17: Exorcism Beads
+ 0x18: Ressurrection Beads
+ 0x19: Tundra Beads
+ 0x1a: Tsumugari
+ 0x1b: Seven Strike
+ 0x1c: Blade of Kusanagi
+ 0x1d: Eight Wonder
+ 0x1e: Thunder Edge
+ 0x1f: Demon Fang
+ 0x20: Peach
+ 0x21: Apple
+ 0x22: Orange
+ 0x23: Baked Oranges
+ 0x24: Radish
+ 0x25: Turnip
+ 0x26: Ginseng
+ 0x27: Cabbage
+ 0x28: Chinese cabbage
+ 0x29: Cherry Cake
+ 0x2a: Potato
+ 0x2b: Watermelon
+ 0x2c: Rice Bale
+ 0x2d: Roasted Meat
+ 0x2e: Bamboo Shoot
+ 0x2f: Roasted Fish
+ 0x30: Rice Ball
+ 0x31: Dumplings
+ 0x32: Grapes
+ 0x33: Gourd
+ 0x34: Sasa Rice
+ 0x35: Sasa Fish
+ 0x36: Sasa Egg Rolls
+ 0x37: Sasa Meat
+ 0x38: Sasa Crab
+ 0x39: Sasa Fruit
+ 0x3a: Sasa Dumplings
+ 0x3b: Sasa  Hotchpotch
+ 0x3c: Sasa Cake
+ 0x3d: Rice Stew
+ 0x3e: Millet Dumplings
+ 0x3f: Kamiki Orange
+ 0x40: Tsuta Ruins Key
+ 0x41: Oddly Shaped Turnip
+ 0x42: Canine tracker
+ 0x43: Lucky Mallet
+ 0x44: Border Key?
+ 0x45: Dragon Orb
+ 0x46: Fox Rods
+ 0x47: Thunder Brew
+ 0x48: Shell Amulet
+ 0x49: Mask
+ 0x4a: Ogre Liver
+ 0x4b: Lips of Ice
+ 0x4c: Eyeball of Fire
+ 0x4d: Black Demon Horn
+ 0x4e: Loyalty Orb
+ 0x4f: Justice Orb
+ 0x50: Duty Orb
+ 0x51: Hourglass Orb
+ 0x52: Empty
+ 0x53: Empty
+ 0x54: Empty
+ 0x55: Empty
+ 0x56: Empty
+ 0x57: Empty
+ 0x58: Empty
+ 0x59: Praise
+ 0x5a: Empty
+ 0x5b: Empty
+ 0x5c: Kushi's Sake
+ 0x5d: "Travel Guide: Legend of Orochi"
+ 0x5e: "Travel Guide: Mother Tree"
+ 0x5f: Golden Mushroom
+ 0x60: Gimmick Gear
+ 0x61: "Travel Guide: Northern Land"
+ 0x62: 8 Purification Sake
+ 0x63: Sewaprolo
+ 0x64: "Travel Guide: Celestial Envoy"
+ 0x65: "Travel Guide: Tribe of the Moon"
+ 0x66: "Travel Guide: Power Slash 3"
+ 0x67: "Travel Guide: Cherry Bomb 2"
+ 0x68: "Travel Guide: Cherry Bomb 3"
+ 0x69: "Travel Guide: Land of the Gods"
+ 0x6a: "Travel Guide: Another Civilization"
+ 0x6b: "Travel Guide: Brush Tips"
+ 0x6c: "Travel Guide: Travel Tips"
+ 0x6d: "Travel Guide: Battle Tips"
+ 0x6e: "Travel Guide: Digging Tips"
+ 0x6f: "Travel Guide: Holy Artifacts"
+ 0x70: Traveler's Charm
+ 0x71: Charcoal
+ 0x72: Blinding Snow
+ 0x73: Treasure Box
+ 0x74: Empty
+ 0x75: Herbal Medicine
+ 0x76: Pinwheel
+ 0x77: Marlin Rod
+ 0x78: Empty
+ 0x79: Karmic Transformer 3
+ 0x7a: Karmic Transformer 8
+ 0x7b: Empty
+ 0x7c: Empty
+ 0x7d: "Travel Guide: Inferno Tech"
+ 0x7e: "Travel Guide: Waterspout Tech 2"
+ 0x7f: "Travel Guide: Galestorm Tech"
+ 0x80: "Travel Guide: Thunderstorm Tech"
+ 0x81: "Travel Guide: Power Slash 2"
+ 0x82: Map?
+ 0x83: NRC Stone Guardian Fruit
+ 0x84: "Travel Guide: Enhancing Divinity"
+ 0x85: "Travel Guide: Feeding"
+ 0x86: "Travel Guide: Godhood Tips"
+ 0x87: "Travel Guide: Fleeing Battle"
+ 0x88: "Travel Guide: Enhancing Weapons"
+ 0x89: "Travel Guide: Greensprout Tips"
+ 0x8a: "Travel Guide: Ink Bullet Tips"
+ 0x8b: "Travel Guide: Mark of Kabegami"
+ 0x8c: "Travel Guide: Veil of Mist Tech"
+ 0x8d: "Travel Guide: Waterspout Tech 1"
+ 0x8e: Holy Bone M
+ 0x8f: Holy Bone S
+ 0x90: Feedbag (Meat)
+ 0x91: Feedbag (Herbs)
+ 0x92: Feedbag (Seeds)
+ 0x93: Feedbag (Fish)
+ 0x94: Sashimi
+ 0x95: Golden Lucky Cat
+ 0x96: Thief's Glove
+ 0x97: Wood Mat
+ 0x98: Golden Ink Pot
+ 0x99: Steel Fist Sake
+ 0x9a: Steel Soul sake
+ 0x9b: Godly Charm
+ 0x9c: Water Tablet
+ 0x9d: Fire Tablet
+ 0x9e: Gold Dust
+ 0x9f: Empty
+ 0xa0: White Porcelain Pot
+ 0xa1: Kutani Pottery
+ 0xa2: Empty
+ 0xa3: Incense Burner
+ 0xa4: Vase
+ 0xa5: Silver Pocket Watch
+ 0xa6: Rat Statue
+ 0xa7: Bull Horn
+ 0xa8: Empty
+ 0xa9: Etched Glass
+ 0xaa: Lacquerware Set
+ 0xab: Wooden Bear
+ 0xac: Empty
+ 0xad: Glass Beads
+ 0xae: Dragonfly Bead
+ 0xaf: ?? translucent stone bud treasure 
+ 0xb0: Coral Fragment
+ 0xb1: Crystal
+ 0xb2: Pearl
+ 0xb3: Ruby Tassels
+ 0xb4: Bull Statue
+ 0xb5: Tiger Statue
+ 0xb6: Rabbit Statue
+ 0xb7: Dragon Statue
+ 0xb8: Snake Statue
+ 0xb9: Horse Statue
+ 0xba: Sheep Statue
+ 0xbb: Monkey Statue
+ 0xbc: Rooster Statue
+ 0xbd: Dog Statue
+ 0xbe: Pig Statue
+ 0xbf: Cat Statue
+ 0xc0: Sapphire Tassels
+ 0xc1: Emerald Tassels
+ 0xc2: Turquoise Tassels
+ 0xc3: Agate Tassels
+ 0xc4: Amber Tassels
+ 0xc5: Cat's Eye Tassels
+ 0xc6: Amethyst Tassels
+ 0xc7: Jade Tassels
+ 0xc8: Empty
+ 0xc9: Empty
+ 0xca: Empty
+ 0xcb: Empty
+ 0xcc: Stray Bead
+ 0xcd: String of Beads
+ 0xce: Empty
+ 0xcf: Empty
+ 0xd0: Empty
+ 0xd1: Empty
+ 0xd2: Empty
+ 0xd3: Empty
+ 0xd4: Empty
+ 0xd5: Empty
+ 0xd6: Empty
+ 0xd7: Empty
+ 0xd8: Empty
+ 0xd9: Empty
+ 0xda: Empty
+ 0xdb: Empty
+ 0xdc: Empty
+ 0xdd: Empty
+ 0xde: Empty
+ 0xdf: Empty
+ 0xe0: Flying Fish
+ 0xe1: Sturgeon
+ 0xe2: Sunfish
+ 0xe3: Freshwater Eel
+ 0xe4: Loach
+ 0xe5: Moray
+ 0xe6: Oarfish
+ 0xe7: Monkfish
+ 0xe8: Catfish
+ 0xe9: Giant Catfish
+ 0xea: Goby
+ 0xeb: Empty
+ 0xec: Empty
+ 0xed: Empty
+ 0xee: Empty
+ 0xef: Empty
+ 0xf0: Empty
+ 0xf1: Empty
+ 0xf2: Empty
+ 0xf3: Empty
+ 0xf4: Empty
+ 0xf5: Empty
+ 0xf6: Empty
+ 0xf7: Empty
+ 0xf8: Tsuta Ruins Map
+ 0xf9: Moon Cave Map
+ 0xfa: Imperial Palace Map
+ 0xfb: Oni Island Map
+ 0xfc: Wawku Shrine Map
+ 0xfd: Gale Shrine Map
+ 0xfe: Empty
+ 0xff: Empty

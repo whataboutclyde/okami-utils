@@ -1,0 +1,10 @@
+---
+  0x00: On Land
+  0x01: Underwater
+  0x02: Buried
+  0x03: On Land           # wtf is the difference from 0x00?? Lots of them.
+  0x04: Required Pickup   # Only used for astral pouch chest and devout beads chests. Maybe because forced pickup?
+  0x05: Powerslash Only   # Only used for Kusa Village Gourds. (The ones hanging that you must ps.)
+  0x06: In Canal          # Only used for Sei'an Commoner's Quarter chests in the canal - so "on land" at start, "Underwater" later.
+  0x07: Tidal             # Only used for first three Sunken Ship chests. "On Land" at night, "Underwater" during day.
+  0x13: On Land           # Only used with pots - but pots can be 00 or 03 as well.

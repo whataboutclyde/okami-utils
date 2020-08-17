@@ -1,0 +1,10 @@
+*.code-workspace
+build/
+build/*
+*.o
+*.a
+*.exe
+
+# Until I'm ready.
+*.cpp
+*.h

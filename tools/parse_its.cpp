@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
   }
 
   char* path = argv[1];
-  OKAMI::ITS its(path);
+  OKAMI_UTILS::ITS its(path);
 
   string path_string(path);
   size_t ext_pos = path_string.find(".ITS");
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   YAML::Node box_state = YAML::LoadFile("data/container_state_id.yaml");
   //boxes.remove(boxes[0x5a]);
   for (int i=0; i<its.size(); i++) {
-    OKAMI::ITSEntry entry = its.get(i);
+    OKAMI_UTILS::ITSEntry entry = its.get(i);
     // Use this if I want to filter by commenting out stuff in the yaml files.
     // if (!boxes[entry.container_type] || !items[entry.contents_id])
     //   continue;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
       else if (contents_str.compare("Praise") == 0)
         cout << " (" << unsigned(entry.unknowns[7]) << ")";
       cout << " (";
-      if (box_state[(int)entry.container_state] && strncmp(box_state[(int)entry.container_state].as<string>().c_str(), "Unknown", 8) != 0)
+      if (box_state[(int)entry.container_state] && box_state[(int)entry.container_state].as<string>().compare(0,8,"Unknown") != 0)
         cout << box_state[(int)entry.container_state];
       else
         cout << "container_state: " << std::hex << unsigned(entry.container_state);

@@ -1,7 +1,7 @@
 #include <okami-utils/its.h>
 using namespace std;
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 ITS::ITS(char* path) {
   parse_file(path);
@@ -77,4 +77,4 @@ ITSEntry ITS::get(int i) {
   return entry;
 }
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS

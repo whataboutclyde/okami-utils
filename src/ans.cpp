@@ -3,7 +3,7 @@
 #include <okami-utils/ans.h>
 using namespace std;
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 ANS::ANS(char* path) {
   parse_file(path);
@@ -94,4 +94,4 @@ vector<ANSEntry> ANS::get(uint8_t i) {
   return entries;
 }
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS

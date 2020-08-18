@@ -1,5 +1,5 @@
-#ifndef OKAMI_ITS_H
-#define OKAMI_ITS_H
+#ifndef OKAMI_UTILS_ITS_H
+#define OKAMI_UTILS_ITS_H
 
 #include <cstdint>
 #include <fstream>
@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 #define ITSENTRY_PADDING_SIZE 15
 #define NUM_UNKNOWNS 23 - ITSENTRY_PADDING_SIZE
@@ -51,6 +51,6 @@ class ITS {
     ITSEntry get(int i);
 }; // class ITS
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS
 
-#endif // OKAMI_ITS_H
+#endif // OKAMI_UTILS_ITS_H

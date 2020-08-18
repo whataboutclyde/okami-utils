@@ -2,7 +2,7 @@
 #include <okami-utils/sca.h>
 using namespace std;
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 SCA::SCA(char* path) {
   parse_file(path);
@@ -87,4 +87,4 @@ SCAEntry SCA::get(int i) {
   return entry;
 }
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS

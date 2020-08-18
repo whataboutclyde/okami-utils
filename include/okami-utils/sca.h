@@ -1,5 +1,5 @@
-#ifndef OKAMI_SCA_H
-#define OKAMI_SCA_H
+#ifndef OKAMI_UTILS_SCA_H
+#define OKAMI_UTILS_SCA_H
 
 #include <cstdint>
 #include <vector>
@@ -10,7 +10,7 @@ using namespace std;
 #define SCA_HEADER_ID 0x00414353
 #define SCI_HEADER_ID 0x00494353
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 #define SCA_ENTRY_SIZE sizeof(SCAEntry)
 
@@ -70,6 +70,6 @@ class SCA {
     SCAEntry get(int i);
 }; // class SCA
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS
 
-#endif // OKAMI_SCA_H
+#endif // OKAMI_UTILS_SCA_H

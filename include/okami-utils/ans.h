@@ -1,5 +1,5 @@
-#ifndef OKAMI_ANS_H
-#define OKAMI_ANS_H
+#ifndef OKAMI_UTILS_ANS_H
+#define OKAMI_UTILS_ANS_H
 
 #include <cstdint>
 #include <map>
@@ -8,7 +8,7 @@
 #include <fstream>
 using namespace std;
 
-namespace OKAMI {
+namespace OKAMI_UTILS {
 
 #define ANS_ENTRY_COUNT_TYPE uint32_t
 #define ANS_ENTRY_SIZE sizeof(ANSEntry)
@@ -70,6 +70,6 @@ class ANS {
     vector<ANSEntry> get(uint8_t i);
 }; // class ANS
 
-} // namespace OKAMI
+} // namespace OKAMI_UTILS
 
-#endif // OKAMI_ANS_H
+#endif // OKAMI_UTILS_ANS_H

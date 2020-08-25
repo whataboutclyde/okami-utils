@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
   }
 
   OKAMI_UTILS::AKT akt;
-  akt.pack_dir(argv[1], argv[2]);
+  //akt.pack_dir(argv[1], argv[2]);
 
   return 0;
 }

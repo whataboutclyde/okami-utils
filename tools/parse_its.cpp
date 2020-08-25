@@ -66,7 +66,9 @@ int main(int argc, char *argv[]) {
         cout << box_state[(int)entry.container_state];
       else
         cout << "container_state: " << std::hex << unsigned(entry.container_state);
-      cout << ")" << endl;
-   }
+      cout << ")";
+      cout << " (" << dec << entry.x_coord << ", " << entry.y_coord << ", " << entry.z_coord << ")";
+      cout << endl;
+    }
   }
 }

@@ -16,6 +16,7 @@ add_library(okami-utils STATIC
   src/akt.cpp include/okami-utils/akt.h
   src/ans.cpp include/okami-utils/ans.h
   src/its.cpp include/okami-utils/its.h
+  src/objtbl.cpp include/okami-utils/objtbl.h
   src/sca.cpp include/okami-utils/sca.h)
 target_include_directories(okami-utils PUBLIC include)
 target_link_libraries(okami-utils

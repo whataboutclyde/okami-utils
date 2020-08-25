@@ -23,7 +23,7 @@ enum {
 #pragma pack(push, 1)
 struct ANSEntry {
   uint8_t an_id;    // id from an folder
-  uint8_t unknown1; // always 05
+  uint8_t cat_id;   // category id; always 05
   uint8_t unknown2; // always 03
   uint8_t unknown3; // always 00
   uint8_t x_size;

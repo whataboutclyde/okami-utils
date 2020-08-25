@@ -16,8 +16,8 @@ namespace OKAMI_UTILS {
 
 struct AKTData {
     AKT_FILE_OFFSET_TYPE offset = 0;
-    string file_name;
-    //AK ak;
+//    string file_name;
+    AK ak;
 };
 
 class AKT {
@@ -25,14 +25,16 @@ class AKT {
     static const string filelist_name;
     void cleanup();
     vector<AKTData> data;
+    //vector<AK> ak;
   public:
     AKT() {};
     AKT(char* path);
     ~AKT();
     bool unpack_file(ifstream& fin, char* path);
     bool unpack_file(char* path);
-    bool pack_dir(char* dir_path, char* target_path);
+    // bool pack_dir(char* dir_path, char* target_path);
     int size();
+    AK get(int i);
 }; // class AKT
 
 } // namespace OKAMI_UTILS

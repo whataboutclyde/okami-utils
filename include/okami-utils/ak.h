@@ -39,6 +39,14 @@ struct AKHeader {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
+struct AKYellowEntry {
+  int8_t x;
+  int8_t y;
+  int8_t z;
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
 struct AKCoordinateEntry {
   int16_t x;
   int16_t y;
@@ -62,6 +70,7 @@ class AK {
     void cleanup();
     AKHeader header;
     vector<AKCoordinateEntry> coords;
+    vector<AKYellowEntry> yellow_stuff;
     vector<uint16_t> indices;
     uint32_t start_offset=0;
   public:
@@ -75,6 +84,7 @@ class AK {
     // bool write_file(char* path);
     int num_coords();
     AKCoordinateEntry* get_coords();
+    AKYellowEntry* get_yellow();
     int num_triangles();
     uint16_t* get_triangles();
 }; // class AK

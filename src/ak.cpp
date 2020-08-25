@@ -60,6 +60,13 @@ bool AK::parse_file(ifstream& fin) {
       indices.push_back(ientry.coord_index[n]);
   }
 
+  fin.seekg(header.yellow_offset+start_offset, ios::beg);
+  for (int i=0; i<header.coordinate_count; i++) {
+    AKYellowEntry yentry;
+    fin.read(reinterpret_cast<char*>(&yentry), sizeof(yentry));
+    yellow_stuff.push_back(yentry);
+  }
+
   fin.seekg(header.red_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
     AKCoordinateEntry centry;
@@ -123,6 +130,11 @@ int AK::num_coords() {
 AKCoordinateEntry* AK::get_coords() {
   return coords.data();
 }
+
+AKYellowEntry* AK::get_yellow() {
+  return yellow_stuff.data();
+}
+
 
 int AK::num_triangles() {
   return indices.size()/3;

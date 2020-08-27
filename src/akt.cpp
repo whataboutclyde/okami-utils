@@ -7,19 +7,37 @@ namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
-const string AKT::filelist_name = "filelist.lst";
-
-AKT::AKT(char* path) {
-  unpack_file(path);
-}
-
 AKT::~AKT() {
   cleanup();
 }
 
-bool AKT::unpack_file(ifstream& fin, char* path) {
+bool AKT::parse_file(char* path) {
+  return parse_file(fs::path(path));
+}
+
+bool AKT::parse_file(fs::path path) {
+  cleanup();
+
+  if (!fs::exists(path)) {
+    cerr << "File does not exist: " << path << endl;
+    return false;
+  }
+
+  ifstream fin(path, ios::in|ios::binary);
+  if (!fin.is_open()) {
+    cerr << "Couldn't open file " << path << endl;
+    return false;
+  }
+
+  bool ret = parse_file(fin);
+  fin.close();
+  return ret;
+}
+
+
+// TODO add error handling.
+bool AKT::parse_file(ifstream& fin) {
   AKT_FILE_COUNT_TYPE file_count = 0;
-  int32_t total_size = fs::file_size(path);
   fin.read(reinterpret_cast<char *>(&file_count), sizeof(file_count));
 
   for (int i = 0; i<file_count; i++) {
@@ -28,64 +46,12 @@ bool AKT::unpack_file(ifstream& fin, char* path) {
     data.push_back(meta);
   }
 
-  // for (int i = 0; i<file_count; i++) {
-  //   string ext;
-  //   getline(fin, ext, '\0');
-  //   data[i].file_name.resize(10);
-  //   data[i].file_name=fmt::format("{}.{}", i, ext);
-  //   fin.seekg(4 - ((fin.tellg()) % 4), ios::cur);
-  // }
-
-  // string dir_path = fmt::format("{}_dir/", path);
-  // if (fs::create_directory(dir_path) == -1 && errno != EEXIST) {
-  //   cerr << "Failed to make directory: " << dir_path << endl << strerror(errno) << endl;
-  //   return -1;
-  // }
-
-  // ofstream filelist(dir_path+filelist_name, ios::out|ios::binary);
-  // if (!filelist.is_open()) {
-  //   cerr << "Failed to open file: " << dir_path << filelist_name << endl;
-  //   return -1;
-  // }
-
-  //filelist.write(reinterpret_cast<char*>(&file_count), sizeof(file_count));
   for (int i = 0; i<file_count; i++) {
-    //string file_name=dir_path+data[i].file_name;
-
-    // ofstream fout(file_name, ios::out|ios::binary|ios::trunc);
-    // if (!fout.is_open()) {
-    //   cerr << "Failed to open file: " << dir_path+data[i].file_name << endl;
-    //   return -1;
-    // }
-    //int file_size = ((i < file_count -1) ? data[i+1].offset : total_size) - data[i].offset;
     fin.seekg(data[i].offset, ios::beg);
-    data[i].ak = AK(fin, data[i].offset);
-    // char* buf = (char *)malloc(file_size);
-    // fin.read(buf, file_size);
-    // fout.write(buf,file_size);
-    // fout.close();
-    // free(buf);
-    // filelist << data[i].file_name << endl;
+    data[i].ak.parse_file(fin, data[i].offset);
   }
-
-  //filelist.close();
-  //cout << dec << file_count << " files written." << endl;
 
   return true;
-}
-
-bool AKT::unpack_file(char* path) {
-  cleanup();
-
-  ifstream fin(path, ios::in|ios::binary);
-  if (!fin.is_open()) {
-    cerr << "Couldn't open file " << path << endl;
-    return false;
-  }
-
-  bool ret = unpack_file(fin, path);
-  fin.close();
-  return ret;
 }
 
 // bool AKT::pack_dir(char* dir_path, char* target_path) {
@@ -166,7 +132,7 @@ bool AKT::unpack_file(char* path) {
 // }
 
 void AKT::cleanup() {
-
+  data.clear();
 }
 
 int AKT::size() {

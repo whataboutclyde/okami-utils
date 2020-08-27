@@ -2,19 +2,21 @@
 #define OKAMI_UTILS_AK_H
 
 #include <fstream>
+#include <filesystem>
 #include <cstdint>
 #include <vector>
 using namespace std;
+namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
 #pragma pack(push, 1)
 struct AKHeader {
   uint64_t first8are0;    //Always 00 00 00 00 00 00 00 00
-  uint64_t purple_offset;  //Always 88 00 00 00 00 00 00 00
+  uint64_t purple_offset;  //Always 88 00 00 00 00 00 00 00 - color names are to match my spreadsheet because I don't know what they are yet.
   uint64_t blue_offset;
-  uint64_t red_offset;
-  uint64_t green_offset;
+  uint64_t coordinates_offset;
+  uint64_t indices_offset;
   uint16_t unknown1;      // 01-33 but not 32
   uint16_t unknown2;      // 01-23 but not 15, 18, 1f
   uint16_t unknown3;      // 01-33 but not 2d because it's a 3d game duh.
@@ -32,20 +34,22 @@ struct AKHeader {
   uint32_t alwayszero;
   uint32_t unknown5;      // Always 00-FF (not all values though)
   uint32_t unknown6;      // 00-FF except broken/dev areas have FFFF sometimes. Most are 00 though.
-  uint32_t padding1[3];
-  uint64_t yellow_offset;
-  uint32_t padding2[4];
+  uint32_t padding1[3];   // Always 00.
+  uint64_t vector_normals_offset;
+  uint32_t padding2[4];   // Always 00.
 };
 #pragma pack(pop)
 
+// I should not be doing this but I'm doing it for now.
 #pragma pack(push, 1)
-struct AKYellowEntry {
+struct AKVectorNormalEntry {
   int8_t x;
   int8_t y;
   int8_t z;
 };
 #pragma pack(pop)
 
+// I should not be doing this but I'm doing it for now.
 #pragma pack(push, 1)
 struct AKCoordinateEntry {
   int16_t x;
@@ -54,6 +58,8 @@ struct AKCoordinateEntry {
 };
 #pragma pack(pop)
 
+// So the interesting part of this bit is in the files I've looked at, 
+// unknown1 varies but unknown 2-5 is the same for every entry.
 #pragma pack(push, 1)
 struct AKIndicesEntry {
   int16_t coord_index[3];
@@ -70,23 +76,23 @@ class AK {
     void cleanup();
     AKHeader header;
     vector<AKCoordinateEntry> coords;
-    vector<AKYellowEntry> yellow_stuff;
+    vector<AKVectorNormalEntry> vector_normals;
     vector<uint16_t> indices;
-    uint32_t start_offset=0;
   public:
     AK() {};
-    AK(char* path);
-    AK(ifstream& fin, uint32_t offset);
     ~AK();
-    bool parse_file(ifstream& fin);
+    bool parse_file(ifstream& fin, uint32_t start_offset);
+    bool parse_file(fs::path path);
     bool parse_file(char* path);
-    // void write_file(ofstream& fout);
+    // TODO: Add purple+blue to parsing so I can write separate .AK files.
+    // bool write_file(ofstream& fout);
+    // bool write_file(fs::path path);
     // bool write_file(char* path);
-    int num_coords();
-    AKCoordinateEntry* get_coords();
-    AKYellowEntry* get_yellow();
-    int num_triangles();
-    uint16_t* get_triangles();
+    int num_coordinates();
+    AKCoordinateEntry* get_coordinates();
+    AKVectorNormalEntry* get_vector_normals();
+    int num_index_sets();
+    uint16_t* get_index_sets();
 }; // class AK
 
 } // namespace OKAMI_UTILS

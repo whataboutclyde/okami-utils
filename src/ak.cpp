@@ -6,20 +6,17 @@ using namespace std;
 
 namespace OKAMI_UTILS {
 
-AK::AK(char* path) {
-  parse_file(path);
-}
-
-AK::AK(ifstream& fin, uint32_t offset) {
-  start_offset = offset;
-  parse_file(fin);
-}
-
 AK::~AK() {
   cleanup();
 }
 
-bool AK::parse_file(ifstream& fin) {
+void AK::cleanup() {
+  coords.clear();
+  vector_normals.clear();
+  indices.clear();
+}
+
+bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
   AKHeader header;
   fin.read(reinterpret_cast<char*>(&header),sizeof(header));
 
@@ -51,8 +48,8 @@ bool AK::parse_file(ifstream& fin) {
       cout << "FUCK padding2 index " << dec << i << ": " << hex << header.padding2[i] << endl;
   }
 
-  int green_count = (header.yellow_offset - header.green_offset)/sizeof(AKIndicesEntry);
-  fin.seekg(header.green_offset+start_offset, ios::beg);
+  int green_count = (header.vector_normals_offset - header.indices_offset)/sizeof(AKIndicesEntry);
+  fin.seekg(header.indices_offset+start_offset, ios::beg);
   for (int i=0; i<green_count; i++) {
     AKIndicesEntry ientry;
     fin.read(reinterpret_cast<char*>(&ientry), sizeof(ientry));
@@ -60,24 +57,24 @@ bool AK::parse_file(ifstream& fin) {
       indices.push_back(ientry.coord_index[n]);
   }
 
-  fin.seekg(header.yellow_offset+start_offset, ios::beg);
+  fin.seekg(header.vector_normals_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
-    AKYellowEntry yentry;
-    fin.read(reinterpret_cast<char*>(&yentry), sizeof(yentry));
-    yellow_stuff.push_back(yentry);
+    AKVectorNormalEntry vnentry;
+    fin.read(reinterpret_cast<char*>(&vnentry), sizeof(vnentry));
+    vector_normals.push_back(vnentry);
   }
 
-  fin.seekg(header.red_offset+start_offset, ios::beg);
+  fin.seekg(header.coordinates_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
     AKCoordinateEntry centry;
     fin.read(reinterpret_cast<char*>(&centry), sizeof(centry));
     coords.push_back(centry);
   }
 
-  return false;
+  return true;
 }
 
-bool AK::parse_file(char* path) {
+bool AK::parse_file(fs::path path) {
   cleanup();
 
   ifstream fin(path, ios::in|ios::binary);
@@ -91,56 +88,28 @@ bool AK::parse_file(char* path) {
   return ret;
 }
 
-// void AK::write_file(ofstream& fout) {
-  // int file_size = sizeof(AK_ENTRY_COUNT_TYPE) + (AK_ENTRY_SIZE + AK_ENTRY_PADDING_SIZE)*entries.size();
-  // int padding = 32-(file_size % 32); // padding for 32 byte alignment.
-  // char* pad_buffer = (char*)calloc(sizeof(uint8_t),padding > AK_ENTRY_PADDING_SIZE ? padding : AK_ENTRY_PADDING_SIZE);
-
-  // AK_ENTRY_COUNT_TYPE entry_count = entries.size();
-  // fout.write(reinterpret_cast<char *>(&entry_count), sizeof(AK_ENTRY_COUNT_TYPE));
-  // for (int i=0;i<entry_count;i++) {
-  //   fout.write(reinterpret_cast<char *>(&entries[i]), AK_ENTRY_SIZE);
-  //   //reading in padding for now
-  //   //fout.write(pad_buffer, AK_ENTRY_PADDING_SIZE);
-  // }
-  // fout.write(pad_buffer, padding);
-  // free(pad_buffer);
-// }
-
-// bool AK::write_file(char* path) {
-  // ofstream fout(path, ios::out|ios::binary);
-  // if (!fout.is_open()) {
-  //   cerr << "Couldn't open file " << path << endl;
-  //   return false;
-  // }
-  // write_file(fout);
-  // fout.close();
-  // return true;
-//   return false;
-// }
-
-void AK::cleanup() {
-
+bool AK::parse_file(char* path) {
+  return parse_file(fs::path(path));
 }
 
-int AK::num_coords() {
+int AK::num_coordinates() {
   return coords.size();
 }
 
-AKCoordinateEntry* AK::get_coords() {
+AKCoordinateEntry* AK::get_coordinates() {
   return coords.data();
 }
 
-AKYellowEntry* AK::get_yellow() {
-  return yellow_stuff.data();
+AKVectorNormalEntry* AK::get_vector_normals() {
+  return vector_normals.data();
 }
 
 
-int AK::num_triangles() {
+int AK::num_index_sets() {
   return indices.size()/3;
 }
 
-uint16_t* AK::get_triangles() {
+uint16_t* AK::get_index_sets() {
   return indices.data();
 }
 

@@ -5,8 +5,10 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <filesystem>
 #include <okami-utils/ak.h>
 using namespace std;
+namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
@@ -28,10 +30,10 @@ class AKT {
     //vector<AK> ak;
   public:
     AKT() {};
-    AKT(char* path);
     ~AKT();
-    bool unpack_file(ifstream& fin, char* path);
-    bool unpack_file(char* path);
+    bool parse_file(char* path);
+    bool parse_file(fs::path path);
+    bool parse_file(ifstream& fin);
     // bool pack_dir(char* dir_path, char* target_path);
     int size();
     AK get(int i);

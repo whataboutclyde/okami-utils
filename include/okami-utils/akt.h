@@ -27,7 +27,6 @@ class AKT {
     static const string filelist_name;
     void cleanup();
     vector<AKTData> data;
-    //vector<AK> ak;
   public:
     AKT() {};
     ~AKT();

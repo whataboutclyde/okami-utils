@@ -34,7 +34,6 @@ bool AKT::parse_file(fs::path path) {
   return ret;
 }
 
-
 // TODO add error handling.
 bool AKT::parse_file(ifstream& fin) {
   AKT_FILE_COUNT_TYPE file_count = 0;
@@ -46,7 +45,7 @@ bool AKT::parse_file(ifstream& fin) {
     data.push_back(meta);
   }
 
-  for (int i = 0; i<file_count; i++) {
+  for (int i = 0; i<data.size(); i++) {
     fin.seekg(data[i].offset, ios::beg);
     data[i].ak.parse_file(fin, data[i].offset);
   }

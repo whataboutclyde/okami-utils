@@ -17,7 +17,6 @@ void AK::cleanup() {
 }
 
 bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
-  AKHeader header;
   fin.read(reinterpret_cast<char*>(&header),sizeof(header));
 
   //cout << path << endl;
@@ -59,14 +58,14 @@ bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
 
   fin.seekg(header.vector_normals_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
-    AKVectorNormalEntry vnentry;
+    Int8Tuple vnentry;
     fin.read(reinterpret_cast<char*>(&vnentry), sizeof(vnentry));
     vector_normals.push_back(vnentry);
   }
 
   fin.seekg(header.coordinates_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
-    AKCoordinateEntry centry;
+    Int16Tuple centry;
     fin.read(reinterpret_cast<char*>(&centry), sizeof(centry));
     coords.push_back(centry);
   }
@@ -96,11 +95,11 @@ int AK::num_coordinates() {
   return coords.size();
 }
 
-AKCoordinateEntry* AK::get_coordinates() {
+Int16Tuple* AK::get_coordinates() {
   return coords.data();
 }
 
-AKVectorNormalEntry* AK::get_vector_normals() {
+Int8Tuple* AK::get_vector_normals() {
   return vector_normals.data();
 }
 
@@ -111,6 +110,25 @@ int AK::num_index_sets() {
 
 uint16_t* AK::get_index_sets() {
   return indices.data();
+}
+
+void AK::dump_binary(ofstream& fout) {
+  int pad;
+  for (vector<Int16Tuple>::iterator it=coords.begin(); it!=coords.end(); it++)
+    fout.write(reinterpret_cast<char *>(&*it), sizeof(Int16Tuple));
+  pad = coords.size()*sizeof(Int16Tuple)%2;
+  for (int i=0; i<pad; i++)
+    fout.put('\0');
+  for (vector<Int8Tuple>::iterator it=vector_normals.begin(); it!=vector_normals.end(); it++)
+    fout.write(reinterpret_cast<char *>(&*it), sizeof(Int8Tuple));
+  pad = vector_normals.size()*sizeof(Int8Tuple)%2;
+  for (int i=0; i<pad; i++)
+    fout.put('\0');
+  for (vector<uint16_t>::iterator it=indices.begin(); it!=indices.end(); it++)
+    fout.write(reinterpret_cast<char *>(&*it), sizeof(uint16_t));
+  pad = coords.size()*sizeof(Int16Tuple)%2;
+  for (int i=0; i<pad; i++)
+    fout.put('\0');
 }
 
 } // namespace OKAMI_UTILS

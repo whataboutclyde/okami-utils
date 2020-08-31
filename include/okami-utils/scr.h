@@ -2,6 +2,7 @@
 #define OKAMI_UTILS_SCR_H
 
 #include <cstdint>
+#include <okami-utils/common.h>
 using namespace std;
 
 #define SCR_ID_STRING 0x00726373
@@ -40,9 +41,7 @@ struct MDHeader {
 
 #pragma pack(push, 1)
 struct Vertex {
-  int16_t x;
-  int16_t y;
-  int16_t z;
+  Int16Tuple coordinates;
   int16_t conn;
 };
 #pragma pack(pop);

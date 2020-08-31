@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <cstdint>
 #include <vector>
+#include <glm/glm.hpp>
 #include <okami-utils/common.h>
 using namespace std;
 namespace fs = filesystem;
@@ -62,7 +63,7 @@ class AK {
     vector<Int8Tuple> vector_normals;
     vector<uint16_t> indices;
   public:
-    AK() {};
+    AK() {static_assert(sizeof(glm::vec3) == sizeof(float) * 3, "Platform doesn't support this directly.");};
     ~AK();
     AKHeader header;
     bool parse_file(ifstream& fin, uint32_t start_offset);
@@ -74,10 +75,16 @@ class AK {
     // bool write_file(char* path);
     int num_coordinates();
     Int16Tuple* get_coordinates();
+    FloatConstraints get_constraints();
     Int8Tuple* get_vector_normals();
+    int num_indices();
     int num_index_sets();
     uint16_t* get_index_sets();
-    void dump_binary(ofstream& fout);
+    int get_gltf_position_size();
+    int get_gltf_normal_size();
+    int get_gltf_indices_size();
+    int get_gltf_buffer_size();
+    void dump_gltf_binary(ofstream& fout);
 }; // class AK
 
 } // namespace OKAMI_UTILS

@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
       else
         cout << "container_state: " << std::hex << unsigned(entry.container_state);
       cout << ")";
-      cout << " (" << dec << entry.x_coord << ", " << entry.y_coord << ", " << entry.z_coord << ")";
+      cout << " (" << dec << entry.coordinates.x << ", " << entry.coordinates.y << ", " << entry.coordinates.z << ")";
       cout << endl;
     }
   }

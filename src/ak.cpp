@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <iterator>
+#include <glm/gtc/packing.hpp>
 #include <okami-utils/ak.h>
 using namespace std;
 
@@ -99,10 +100,24 @@ Int16Tuple* AK::get_coordinates() {
   return coords.data();
 }
 
+FloatConstraints AK::get_constraints() {
+  FloatConstraints constraints;
+  constraints.min_x = header.min_x;
+  constraints.max_x = header.max_x;
+  constraints.min_y = header.min_y;
+  constraints.max_y = header.max_y;
+  constraints.min_z = header.min_z;
+  constraints.max_z = header.max_z;
+  return constraints;
+}
+
 Int8Tuple* AK::get_vector_normals() {
   return vector_normals.data();
 }
 
+int AK::num_indices() {
+  return indices.size();
+}
 
 int AK::num_index_sets() {
   return indices.size()/3;
@@ -112,23 +127,53 @@ uint16_t* AK::get_index_sets() {
   return indices.data();
 }
 
-void AK::dump_binary(ofstream& fout) {
-  int pad;
-  for (vector<Int16Tuple>::iterator it=coords.begin(); it!=coords.end(); it++)
-    fout.write(reinterpret_cast<char *>(&*it), sizeof(Int16Tuple));
-  pad = coords.size()*sizeof(Int16Tuple)%2;
-  for (int i=0; i<pad; i++)
-    fout.put('\0');
-  for (vector<Int8Tuple>::iterator it=vector_normals.begin(); it!=vector_normals.end(); it++)
-    fout.write(reinterpret_cast<char *>(&*it), sizeof(Int8Tuple));
-  pad = vector_normals.size()*sizeof(Int8Tuple)%2;
-  for (int i=0; i<pad; i++)
-    fout.put('\0');
+void AK::dump_gltf_binary(ofstream& fout) {
+  for (vector<Int16Tuple>::iterator it=coords.begin(); it!=coords.end(); it++) {
+    FloatTuple floats;
+    floats.x = (float)it->x;
+    floats.y = (float)it->y;
+    floats.z = (float)it->z;
+    fout.write(reinterpret_cast<char *>(&floats), sizeof(floats));
+  }
+  
+  for (vector<Int8Tuple>::iterator it=vector_normals.begin(); it!=vector_normals.end(); it++) {
+    FloatTuple floats;
+    glm::vec3 stuff{glm::unpackSnorm1x8(it->x), glm::unpackSnorm1x8(it->y), glm::unpackSnorm1x8(it->z)};
+    stuff=glm::normalize(stuff);
+    floats.x = stuff.x;
+    floats.y = stuff.y;
+    floats.z = stuff.z;
+    fout.write(reinterpret_cast<char *>(&floats), sizeof(floats));
+  }
+  
   for (vector<uint16_t>::iterator it=indices.begin(); it!=indices.end(); it++)
     fout.write(reinterpret_cast<char *>(&*it), sizeof(uint16_t));
-  pad = coords.size()*sizeof(Int16Tuple)%2;
-  for (int i=0; i<pad; i++)
-    fout.put('\0');
+
+  int pad = (indices.size() * sizeof(uint16_t)) % 4;
+  if (pad != 0) {
+    for (int i=0; i<4-pad; i++)
+      fout.put('\0');
+  }
+
+}
+
+int AK::get_gltf_position_size() {
+  return coords.size()*sizeof(FloatTuple);
+}
+
+int AK::get_gltf_normal_size() {
+  return vector_normals.size()*sizeof(glm::vec3);
+}
+
+int AK::get_gltf_indices_size() {
+  int pad = (indices.size()*sizeof(uint16_t))%4;
+  if (pad != 0)
+    pad = 4-pad;
+  return indices.size()*sizeof(uint16_t) + pad;
+}
+
+int AK::get_gltf_buffer_size() {
+  return get_gltf_position_size()+get_gltf_normal_size()+get_gltf_indices_size();
 }
 
 } // namespace OKAMI_UTILS

@@ -12,6 +12,7 @@ namespace fs = filesystem;
 namespace rj = rapidjson;
 
 #define OUT_FILE "F:\\okami-utils\\test.gltf"
+#define BIN_FILE "F:\\okami-utils\\test.bin"
 #define LEVEL_FILE "F:\\okami\\st1\\r122.dat_dir\\r122.AKT"
 
 void write_asset(rj::Document& gltf, rj::Document::AllocatorType& allocator) {
@@ -58,6 +59,7 @@ void write_materials(rj::Document& gltf, rj::Document::AllocatorType& allocator)
 
 int main(int argc, char* argv[]) {
   fs::path path(OUT_FILE);
+  fs::path bin(BIN_FILE);
 
   rj::Document gltf;
   gltf.SetObject();
@@ -80,7 +82,7 @@ int main(int argc, char* argv[]) {
   rj::Value accessors(rj::kArrayType);
   rj::Value buffer_views(rj::kArrayType);
   unsigned int offset = 0;
-  cout << level.size() << endl;
+  //for (int i=6; i<7; i++) {
   for (int i=0; i<level.size(); i++) {
     rj::Value ak_node(rj::kObjectType);
     ak_node.AddMember("mesh", i, allocator);
@@ -106,36 +108,36 @@ int main(int argc, char* argv[]) {
 
     rj::Value coord_access(rj::kObjectType);
     coord_access.AddMember("bufferView", 3*i, allocator);
-    coord_access.AddMember("componentType", 5122, allocator);
+    coord_access.AddMember("componentType", 5126, allocator);
     coord_access.AddMember("count", ak.num_coordinates(), allocator);
     rj::Value max(rj::kArrayType);
-    max.PushBack((int16_t)ak.header.max_x, allocator).PushBack((int16_t)ak.header.max_y, allocator).PushBack((int16_t)ak.header.max_z, allocator);
+    max.PushBack(ak.header.max_x, allocator).PushBack(ak.header.max_y, allocator).PushBack(ak.header.max_z, allocator);
     coord_access.AddMember("max", max, allocator);
     rj::Value min(rj::kArrayType);
-    min.PushBack((int16_t)ak.header.min_x, allocator).PushBack((int16_t)ak.header.min_y, allocator).PushBack((int16_t)ak.header.min_z, allocator);
+    min.PushBack(ak.header.min_x, allocator).PushBack(ak.header.min_y, allocator).PushBack(ak.header.min_z, allocator);
     coord_access.AddMember("min", min, allocator);
     coord_access.AddMember("type", "VEC3", allocator);
     accessors.PushBack(coord_access, allocator);
 
     rj::Value coord_buff(rj::kObjectType);
     coord_buff.AddMember("buffer", 0, allocator);
-    coord_buff.AddMember("byteLength", sizeof(OKAMI_UTILS::Int16Tuple)*ak.num_coordinates(), allocator);
+    coord_buff.AddMember("byteLength", sizeof(OKAMI_UTILS::FloatTuple)*ak.num_coordinates(), allocator);
     coord_buff.AddMember("byteOffset", offset, allocator);
-    offset += sizeof(OKAMI_UTILS::Int16Tuple)*ak.num_coordinates();
+    offset += sizeof(OKAMI_UTILS::FloatTuple)*ak.num_coordinates();
     buffer_views.PushBack(coord_buff, allocator);
 
     rj::Value vn_access(rj::kObjectType);
     vn_access.AddMember("bufferView", 3*i+1, allocator);
-    vn_access.AddMember("componentType", 5120, allocator);
+    vn_access.AddMember("componentType", 5126, allocator);
     vn_access.AddMember("count", ak.num_coordinates(), allocator);
     vn_access.AddMember("type", "VEC3", allocator);
     accessors.PushBack(vn_access, allocator);
 
     rj::Value vn_buff(rj::kObjectType);
     vn_buff.AddMember("buffer", 0, allocator);
-    vn_buff.AddMember("byteLength", sizeof(OKAMI_UTILS::Int8Tuple)*ak.num_coordinates(), allocator);
+    vn_buff.AddMember("byteLength", sizeof(OKAMI_UTILS::FloatTuple)*ak.num_coordinates(), allocator);
     vn_buff.AddMember("byteOffset", offset, allocator);
-    offset += sizeof(OKAMI_UTILS::Int8Tuple)*ak.num_coordinates();
+    offset += sizeof(OKAMI_UTILS::FloatTuple)*ak.num_coordinates();
     buffer_views.PushBack(vn_buff, allocator);
 
     rj::Value index_access(rj::kObjectType);
@@ -150,12 +152,14 @@ int main(int argc, char* argv[]) {
     index_buff.AddMember("byteLength", sizeof(uint16_t)*ak.num_index_sets()*3, allocator);
     index_buff.AddMember("byteOffset", offset, allocator);
     offset += sizeof(uint16_t)*ak.num_index_sets()*3;
-    offset += offset%2;
     buffer_views.PushBack(index_buff, allocator);
+
+    if (offset%4 != 0)
+      offset += 4-(offset%4);
   }
   rj::Value scene_val(rj::kObjectType);
   scene_val.AddMember("name", "scene", allocator);
-  scene_val.AddMember("nodes", scene_nodes, allocator);
+  scene_val.AddMember("nodes", scene_nodes, allocator); 
   scenes.PushBack(scene_val, allocator);
   gltf.AddMember("scenes", scenes, allocator);
   gltf.AddMember("nodes", nodes, allocator);
@@ -169,6 +173,7 @@ int main(int argc, char* argv[]) {
   rj::Value buffers(rj::kArrayType);
   rj::Value buffers_entry(rj::kObjectType);
   buffers_entry.AddMember("byteLength", offset, allocator);
+  buffers_entry.AddMember("uri", bin.filename().string(), allocator);
   buffers.PushBack(buffers_entry, allocator);
   gltf.AddMember("buffers", buffers, allocator);
 
@@ -187,21 +192,16 @@ int main(int argc, char* argv[]) {
   int version = 2;
   fout.write(reinterpret_cast<char*>(&version), sizeof(int));
   int json_len = json.GetSize();
-  int file_size = 20 + offset + json_len + 8;
+  int file_size = 20 + json_len;
   fout.write(reinterpret_cast<char*>(&file_size), sizeof(unsigned int));
   fout.write(reinterpret_cast<char*>(&json_len), sizeof(int));
   fout << "JSON";
   // Dump the json here.
   fout << json.GetString();
-  // Before binary data header:
-  //   binary_data_size
-  //   BIN\0
-  fout.write(reinterpret_cast<char*>(&offset), sizeof(unsigned int));
-  fout << "BIN";
-  fout.put('\0');
-  // Write the binary data.
-  for (int i=0; i<level.size(); i++)
-    level.get(i).dump_binary(fout);
+  fout.close();
+
+  fout.open(BIN_FILE, ios::out|ios::binary);
+  level.dump_gltf_binary(fout);
   fout.close();
 
   return 0;

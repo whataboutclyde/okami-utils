@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <okami-utils/common.h>
 using namespace std;
 
 namespace OKAMI_UTILS {
@@ -20,15 +21,9 @@ struct ITSEntry {
   uint8_t unknown1; // always 0a
   uint8_t unknown2; // always 01
   uint8_t container_state;
-  uint8_t x_size;
-  uint8_t y_size;
-  uint8_t z_size;
-  uint8_t x_rotate;
-  uint8_t y_rotate;
-  uint8_t z_rotate;
-  int16_t x_coord;
-  int16_t y_coord;
-  int16_t z_coord;
+  UInt8Tuple size;
+  UInt8Tuple rotation;
+  Int16Tuple coordinates;
   uint8_t container_type;
   uint8_t unknowns[NUM_UNKNOWNS];
   //ITSENTRY_PADDING_SIZE bytes padding, just fseek past it.

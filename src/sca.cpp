@@ -30,7 +30,7 @@ bool SCA::parse_file(ifstream& fin) {
   return true;
 }
 
-bool SCA::parse_file(char* path) {
+bool SCA::parse_file(fs::path path) {
   cleanup();
 
   ifstream fin(path, ios::in|ios::binary);
@@ -42,6 +42,10 @@ bool SCA::parse_file(char* path) {
   bool ret = parse_file(fin);
   fin.close();
   return ret;
+}
+
+bool SCA::parse_file(char* path) {
+  return parse_file(fs::path(path));
 }
 
 void SCA::write_file(ofstream& fout) {

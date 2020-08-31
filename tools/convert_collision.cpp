@@ -28,14 +28,14 @@ void usage() {
 
 void write_coordinates(ofstream& fout, OKAMI_UTILS::AK ak) {
   int coord_count = ak.num_coordinates();
-  OKAMI_UTILS::AKCoordinateEntry* coords = ak.get_coordinates();
+  OKAMI_UTILS::Int16Tuple* coords = ak.get_coordinates();
   for (int i=0; i<coord_count; i++)
     fout << "v " << (float)coords[i].x << " " << (float)coords[i].y << " " << (float)coords[i].z << endl;
 }
 
 void write_vector_normals(ofstream& fout, OKAMI_UTILS::AK ak) {
   int coord_count = ak.num_coordinates();
-  OKAMI_UTILS::AKVectorNormalEntry* vn = ak.get_vector_normals();
+  OKAMI_UTILS::Int8Tuple* vn = ak.get_vector_normals();
   for (int i=0; i<coord_count; i++)
     fout << "vn " << (float)vn[i].x << " " << (float)vn[i].y << " " << (float)vn[i].z << endl;
 }

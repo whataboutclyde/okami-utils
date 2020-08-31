@@ -40,6 +40,17 @@ struct FloatTuple {
 };
 #pragma pack(pop)
 
+#pragma pack(push, 1)
+struct FloatConstraints {
+  float min_x;
+  float max_x;
+  float min_y;
+  float max_y;
+  float min_z;
+  float max_z;
+};
+#pragma pack(pop)
+
 } // namespace OKAMI_UTILS
 
 #endif //OKAMI_UTILS_COMMON_H

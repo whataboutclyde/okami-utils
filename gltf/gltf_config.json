@@ -1,0 +1,56 @@
+{
+	"name": "River of the Heavens",
+	"output": "F:\\okami-collision-v4\\st1\\r122\\",
+	"materials": [
+		{
+			"name": "Collision",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.800000011920929,
+					0.800000011920929,
+					0.800000011920929,
+					1.0
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		},
+		{
+			"name": "Quadrilateral",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.000000011920929,
+					0.800000011920929,
+					0.800000011920929,
+					0.5
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		}
+	],
+	"sources": [
+		{
+			"path": "F:\\okami\\st1\\r122.dat_dir\\r122.AKT",
+			"type": 0,
+			"material": 0
+		},
+		{
+			"path": "F:\\okami\\st1\\r122.bin_dir\\r122.SCA",
+			"type": 1,
+			"material": 1
+		},
+		{
+			"path": "F:\\okami\\st1\\r122.bin_dir\\R122.MEH",
+			"type": 1,
+			"material": 1
+		},
+		{
+			"path": "F:\\okami\\st1\\r122.dat_dir\\r122.SCI",
+			"type": 1,
+			"material": 1
+		}
+	]
+}

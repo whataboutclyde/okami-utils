@@ -6,6 +6,7 @@
 #include <list>
 #include <vector>
 #include <fstream>
+#include <okami-utils/common.h>
 using namespace std;
 
 namespace OKAMI_UTILS {
@@ -26,15 +27,9 @@ struct ANSEntry {
   uint8_t cat_id;   // category id; always 05
   uint8_t unknown2; // always 03
   uint8_t unknown3; // always 00
-  uint8_t x_size;
-  uint8_t y_size;
-  uint8_t z_size;
-  uint8_t x_rotate;
-  uint8_t y_rotate;
-  uint8_t z_rotate;
-  int16_t x_coord;
-  int16_t y_coord;
-  int16_t z_coord;
+  UInt8Tuple size;
+  UInt8Tuple rotation;
+  Int16Tuple coordinates;
   uint8_t unknown4; // 00-04, seems to affect animal texture used.
   uint8_t unknown5; // 00-08, 0f
   uint8_t group_id; // Offset for the group fed bit in memory starting at main.dll+B213AE bit 3? (First group is 03, at bit 6.)

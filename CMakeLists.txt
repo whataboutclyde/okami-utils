@@ -10,11 +10,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(OKAMI_CPP_BUILD_TOOLS "Enable parse tools" ON)
 
 find_package(fmt REQUIRED)
+find_package(OpenGL REQUIRED)
 
 add_library(okami-utils STATIC 
+  src/common.cpp include/okami-utils/common.h
   src/ak.cpp  include/okami-utils/ak.h
   src/akt.cpp include/okami-utils/akt.h
   src/ans.cpp include/okami-utils/ans.h
+  src/ect.cpp include/okami-utils/ect.h
   src/its.cpp include/okami-utils/its.h
   src/objtbl.cpp include/okami-utils/objtbl.h
   src/sca.cpp include/okami-utils/sca.h)
@@ -22,6 +25,9 @@ target_include_directories(okami-utils PUBLIC include)
 target_link_libraries(okami-utils
   PRIVATE fmt)
 
+include_directories(${OPENGL_INCLUDE_DIRS})
+
 if(OKAMI_CPP_BUILD_TOOLS)
 	add_subdirectory(tools)
+  add_subdirectory(gltf)
 endif()

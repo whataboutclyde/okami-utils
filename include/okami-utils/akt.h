@@ -36,6 +36,8 @@ class AKT {
     // bool pack_dir(char* dir_path, char* target_path);
     int size();
     AK get(int i);
+    int get_gltf_buffer_size();
+    void dump_gltf_binary(ofstream& fout);
 }; // class AKT
 
 } // namespace OKAMI_UTILS

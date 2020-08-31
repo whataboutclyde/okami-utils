@@ -4,7 +4,9 @@
 #include <cstdint>
 #include <vector>
 #include <fstream>
+#include <filesystem>
 using namespace std;
+namespace fs = filesystem;
 
 #define MEH_HEADER_ID 0x0048454D
 #define SCA_HEADER_ID 0x00414353
@@ -53,7 +55,7 @@ struct SCAEntry {
 #pragma pack(pop)
 
 class SCA {
-  private:
+  protected:
     SCAHeader header;
     vector<SCAEntry> entries;
     void cleanup();
@@ -62,6 +64,7 @@ class SCA {
     SCA(char* path);
     ~SCA();
     bool parse_file(ifstream& fin);
+    bool parse_file(fs::path path);
     bool parse_file(char* path);
     void write_file(ofstream& fout);
     bool write_file(char* path);

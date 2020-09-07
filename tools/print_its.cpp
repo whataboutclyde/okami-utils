@@ -23,7 +23,6 @@ int main(int argc, char *argv[]) {
   string area = path_string.substr(ext_pos-2, 2);
   int region_id = stoi(region, 0, 16);
   int area_id = stoi(area, 0, 16);
-  cout << hex << unsigned(region_id) << endl << unsigned(area_id) << endl;
   YAML::Node world;
   try {
     world = YAML::LoadFile("data/area_id.yaml");
@@ -45,8 +44,8 @@ int main(int argc, char *argv[]) {
   for (int i=0; i<its.size(); i++) {
     OKAMI_UTILS::ITSEntry entry = its.get(i);
     // Use this if I want to filter by commenting out stuff in the yaml files.
-    // if (!boxes[entry.container_type] || !items[entry.contents_id])
-    //   continue;
+    if (!boxes[(int)entry.container_type] || !items[(int)entry.contents_id])
+      continue;
 
     //Pretty printing shit.
     if (boxes[(int)entry.container_type])

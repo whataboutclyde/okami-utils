@@ -64,7 +64,7 @@ int GLTF::add_buffer(int len, std::string uri="") {
   return buffers.Size()-1;
 }
 
-int GLTF::add_bufferView(int buffer, int len, int offset) {
+int GLTF::add_bufferView(int buffer, int len, int& offset) {
   if (buffer < 0 || len < 1 || offset < 0)
     return -1;
 
@@ -74,6 +74,7 @@ int GLTF::add_bufferView(int buffer, int len, int offset) {
   bv.AddMember("byteOffset", offset, al);
   Value &bufferViews = doc[array_names[BUFFERVIEWS_INDEX]];
   bufferViews.PushBack(bv, al);
+  offset += len;
   return bufferViews.Size()-1;
 }
 

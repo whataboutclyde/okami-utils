@@ -20,34 +20,6 @@ void AK::cleanup() {
 bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
   fin.read(reinterpret_cast<char*>(&header),sizeof(header));
 
-  //cout << path << endl;
-  if (header.first8are0 != 0)
-    cout << "FUCK first 8: " << hex << setfill('0') << setw(8) << header.first8are0 << endl;
-  if (header.purple_offset != 0x88)
-    cout << "FUCK purple offset: " << hex << setfill('0') << setw(8) << header.purple_offset << endl;
-
-  // cout << "unknown1: " << hex << setfill('0') << setw(4) << header.unknown1 << endl; // 01-33 but not 32
-  // cout << "unknown2: " << hex << setfill('0') << setw(4) << header.unknown2 << endl; // 01-23 but not 15, 18, 1f
-  // cout << "unknown3: " << hex << setfill('0') << setw(4) << header.unknown3 << endl; // 01-33 but not 2d
-  // cout << "unknown4: " << hex << setfill('0') << setw(4) << header.unknown4 << endl; // 03-1356 but a lot missing
-
-  // if (header.fourth_offset-header.second_offset != 256) {
-  //   cout << "fml not always same length: " << header.fourth_offset-header.second_offset << endl;
-  // }
-
-  if (header.alwayszero != 0)
-    cout << "FUCK alwayszero: " << hex << setfill('0') << setw(8) << header.alwayszero << endl;
-
-  for (int i=0;i<3;i++) {
-    if (header.padding1[i]!=0)
-      cout << "FUCK padding1 index " << dec << i << ": " << hex << header.padding1[i] << endl;
-  }
-
-  for (int i=0;i<4;i++) {
-    if (header.padding2[i]!=0)
-      cout << "FUCK padding2 index " << dec << i << ": " << hex << header.padding2[i] << endl;
-  }
-
   int green_count = (header.vector_normals_offset - header.indices_offset)/sizeof(AKIndicesEntry);
   fin.seekg(header.indices_offset+start_offset, ios::beg);
   for (int i=0; i<green_count; i++) {

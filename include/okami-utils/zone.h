@@ -1,5 +1,5 @@
-#ifndef OKAMI_UTILS_SCA_H
-#define OKAMI_UTILS_SCA_H
+#ifndef OKAMI_UTILS_ZONE_H
+#define OKAMI_UTILS_ZONE_H
 
 #include <cstdint>
 #include <vector>
@@ -14,7 +14,26 @@ namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
-#define SCA_ENTRY_SIZE sizeof(SCAEntry)
+#define ZONE_ENTRY_SIZE sizeof(ZoneEntry)
+
+enum ZONE_ENTRY_TYPE {
+  ZONE_BIT_FLAG_TYPE = 0x00,
+  ZONE_EXIT_TYPE = 0x01,
+  ZONE_UNKNOWN02_TYPE = 0x02,
+  ZONE_UNKNOWN03_TYPE = 0x03,
+  ZONE_EXAMINE_TYPE = 0x04,
+  ZONE_ISSUN_INDICATOR_TYPE = 0x05,
+  ZONE_UNKNOWN06_TYPE = 0x06,
+  ZONE_UNKNOWN07_TYPE = 0x07,
+  ZONE_UNKNOWN08_TYPE = 0x08,
+  ZONE_UNKNOWN09_TYPE = 0x09,
+  ZONE_UNKNOWN0A_TYPE = 0x0A
+};
+
+enum ZONE_SHAPE {
+  ZONE_SHAPE_QUAD_PRISM = 0x01,
+  ZONE_SHAPE_CYLINDER = 0x02
+};
 
 #pragma pack(push, 1)
 struct Point {
@@ -24,7 +43,7 @@ struct Point {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-struct SCAHeader {
+struct ZoneHeader {
     uint32_t header;
     uint16_t unknown1;
     uint16_t entry_count;
@@ -33,12 +52,15 @@ struct SCAHeader {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-struct SCAEntry {
+struct ZoneEntry {
     uint64_t pre_entry;     // seems to always be all 00.
-    uint32_t header;
+    uint8_t always01;
+    uint8_t zone_shape;
+    uint8_t zero1;
+    uint8_t zero2;
     float y;
     float height;
-    float unknown_float;
+    float radius;
     Point p1;
     Point p2;
     Point p3;
@@ -54,15 +76,15 @@ struct SCAEntry {
 };
 #pragma pack(pop)
 
-class SCA {
+class Zone {
   protected:
-    SCAHeader header;
-    vector<SCAEntry> entries;
+    ZoneHeader header;
+    vector<ZoneEntry> entries;
     void cleanup();
   public:
-    SCA() {};
-    SCA(char* path);
-    ~SCA();
+    Zone() {};
+    Zone(char* path);
+    ~Zone();
     bool parse_file(ifstream& fin);
     bool parse_file(fs::path path);
     bool parse_file(char* path);
@@ -70,9 +92,9 @@ class SCA {
     bool write_file(char* path);
     int size();
     uint32_t file_type();
-    SCAEntry get(int i);
-}; // class SCA
+    ZoneEntry get(int i);
+}; // class Zone
 
 } // namespace OKAMI_UTILS
 
-#endif // OKAMI_UTILS_SCA_H
+#endif // OKAMI_UTILS_ZONE_H

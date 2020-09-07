@@ -1,15 +1,15 @@
 {
-	"name": "River of the Heavens",
-	"output": "F:\\okami-collision-v4\\st1\\r122\\",
+	"output": "F:\\okami-collision-v5",
+	"gameFiles": "F:\\okami",
 	"materials": [
 		{
 			"name": "Collision",
 			"doubleSided": true,
 			"pbrMetallicRoughness": {
 				"baseColorFactor": [
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
+					0.5,
+					0.5,
+					0.5,
 					1.0
 				],
 				"metallicFactor": 0,
@@ -17,13 +17,69 @@
 			}
 		},
 		{
-			"name": "Quadrilateral",
+			"name": "Exit",
 			"doubleSided": true,
 			"pbrMetallicRoughness": {
 				"baseColorFactor": [
-					0.000000011920929,
-					0.800000011920929,
-					0.800000011920929,
+					0.1,
+					0.0,
+					0.5,
+					0.5
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		},
+		{
+			"name": "Bit Flag",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.0,
+					0.2,
+					0.5,
+					0.5
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		}, 
+		{
+			"name": "Examine",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.0,
+					0.0,
+					0.0,
+					0.8
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		},
+		{
+			"name": "Issun Indicator",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.5,
+					0.5,
+					0.0,
+					0.5
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+		},
+		{
+			"name": "Unknown",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.133,
+					0.0,
+					0.0,
 					0.5
 				],
 				"metallicFactor": 0,
@@ -31,26 +87,489 @@
 			}
 		}
 	],
+	"levels": [
+		{
+			"region": "st0",
+			"maps": [
+				{
+					"id": "r006",
+					"name": "dev-areas\\r006"
+				},
+				{
+					"id": "r007",
+					"name": "dev-areas\\r007"
+				},
+				{
+					"id": "r010",
+					"name": "dev-areas\\r010"
+				},
+				{
+					"id": "r011",
+					"name": "dev-areas\\r011"
+				},
+				{
+					"id": "r020",
+					"name": "dev-areas\\r020"
+				},
+				{
+					"id": "r021",
+					"name": "dev-areas\\r021"
+				},
+				{
+					"id": "r030",
+					"name": "dev-areas\\r030"
+				},
+				{
+					"id": "r031",
+					"name": "dev-areas\\r031"
+				},
+				{
+					"id": "r032",
+					"name": "dev-areas\\r032"
+				},
+				{
+					"id": "r033",
+					"name": "dev-areas\\r033"
+				},
+				{
+					"id": "r034",
+					"name": "dev-areas\\r034"
+				},
+				{
+					"id": "r0ff",
+					"name": "dev-areas\\r0ff"
+				}
+			]
+		},
+		{
+			"region": "st1",
+			"maps": [
+				{
+					"id": "r100",
+					"name": "Kamiki Village (Game Start)"
+				},
+				{
+					"id": "r101",
+					"name": "Cave of Nagi"
+				},
+				{
+					"id": "r102",
+					"name": "Kamiki Village"
+				},
+				{
+					"id": "r103",
+					"name": "Hana Valley"
+				},
+				{
+					"id": "r104",
+					"name": "Tsuta Ruins"
+				},
+				{
+					"id": "r105",
+					"name": "City Checkpoint"
+				},
+				{
+					"id": "r106",
+					"name": "Tsuta Ruins - Spider Queen Arena"
+				},
+				{
+					"id": "r107",
+					"name": "Gale Shrine"
+				},
+				{
+					"id": "r108",
+					"name": "Kusa Village"
+				},
+				{
+					"id": "r109",
+					"name": "Sasa Sanctuary"
+				},
+				{
+					"id": "r10a",
+					"name": "Agata Forest - Madame Fawn's"
+				},
+				{
+					"id": "r10c",
+					"name": "Dojo Learning Room"
+				},
+				{
+					"id": "r10d",
+					"name": "Gale Shrine - Crimson Helm Arena"
+				},
+				{
+					"id": "r10e",
+					"name": "Calcified Cavern"
+				},
+				{
+					"id": "r110",
+					"name": "Moon Cave"
+				},
+				{
+					"id": "r111",
+					"name": "Moon Cave - Orochi Arena"
+				},
+				{
+					"id": "r112",
+					"name": "Kamiki Village (Post-Full Moon)"
+				},
+				{
+					"id": "r113",
+					"name": "Ryoshima Coast - Bandit Spider Grotto"
+				},
+				{
+					"id": "r114",
+					"name": "Taka Pass - Moley's Treasure Trove Grotto"
+				},
+				{
+					"id": "r115",
+					"name": "Kamui - CB3 Grotto"
+				},
+				{
+					"id": "r116",
+					"name": "North Ryoshima Coast - PS2 Grotto"
+				},
+				{
+					"id": "r117",
+					"name": "North Ryoshima Coast - CB2 Grotto"
+				},
+				{
+					"id": "r118",
+					"name": "Kamui (Ezofuji) - PS3 Grotto"
+				},
+				{
+					"id": "r119",
+					"name": "Kamui - Blockhead Grande Grotto"
+				},
+				{
+					"id": "r11a",
+					"name": "North Ryoshima Coast - Bandit Spider Grotto"
+				},
+				{
+					"id": "r11b",
+					"name": "Kamui - Bandit Spider Grotto"
+				},
+				{
+					"id": "r11c",
+					"name": "Dragon Palace - Under Stairs Grotto"
+				},
+				{
+					"id": "r11d",
+					"name": "North Ryoshima Coast - Grotto near Yoichi"
+				},
+				{
+					"id": "r120",
+					"name": "New Game"
+				},
+				{
+					"id": "r121",
+					"name": "Kamiki Village (Broken)"
+				},
+				{
+					"id": "r122",
+					"name": "River of the Heavens"
+				}
+			]
+		},
+		{
+			"region": "st2",
+			"maps": [
+				{
+					"id": "r200",
+					"name": "Sei'an Aristocratic Quarter"
+				},
+				{
+					"id": "r201",
+					"name": "Sei'an Commoners' Quarter"
+				},
+				{
+					"id": "r202",
+					"name": "Himiko's Palace"
+				},
+				{
+					"id": "r203",
+					"name": "Dragon Palace"
+				},
+				{
+					"id": "r204",
+					"name": "Inside the Dragon"
+				},
+				{
+					"id": "r205",
+					"name": "Sunken Ship"
+				},
+				{
+					"id": "r206",
+					"name": "Imperial Palace Entry"
+				},
+				{
+					"id": "r207",
+					"name": "Imperial Palace"
+				},
+				{
+					"id": "r208",
+					"name": "Oni Island - Before Platforming"
+				},
+				{
+					"id": "r209",
+					"name": "Oni Island - Ninetails Arena"
+				},
+				{
+					"id": "r20a",
+					"name": "Catcall Tower"
+				},
+				{
+					"id": "r20b",
+					"name": "Inside the Emperor - Blight Arena"
+				},
+				{
+					"id": "r20c",
+					"name": "Sei'an Commoner's Quarter - Kimono Shop"
+				},
+				{
+					"id": "r20d",
+					"name": "Oni Island - Exterior"
+				},
+				{
+					"id": "r20e",
+					"name": "Oni Island - Upper Floors"
+				},
+				{
+					"id": "r20f",
+					"name": "Oni Island - Platforming"
+				}
+			]
+		},
+		{
+			"region": "st3",
+			"maps": [
+				{
+					"id": "r301",
+					"name": "Wep'keer"
+				},
+				{
+					"id": "r302",
+					"name": "Kamiki Village (Past)"
+				},
+				{
+					"id": "r303",
+					"name": "Wawku Shrine"
+				},
+				{
+					"id": "r304",
+					"name": "Wawku Shrine - Nechku Arena"
+				},
+				{
+					"id": "r305",
+					"name": "Ponc'tan"
+				},
+				{
+					"id": "r306",
+					"name": "Moon Cave - Orochi Arena (Past)"
+				},
+				{
+					"id": "r307",
+					"name": "Ark of Yamato"
+				},
+				{
+					"id": "r308",
+					"name": "Ark of Yamato - Spider Queen Arena"
+				},
+				{
+					"id": "r309",
+					"name": "Ark of Yamato - Orochi Arena"
+				},
+				{
+					"id": "r30a",
+					"name": "Ark of Yamato - Blight Arena"
+				},
+				{
+					"id": "r30b",
+					"name": "Ark of Yamato - Ninetails Arena"
+				},
+				{
+					"id": "r30c",
+					"name": "Ark of Yamato - Crimson Helm Arena"
+				},
+				{
+					"id": "r30d",
+					"name": "Ponc'tan - Mrs. Seal's House"
+				},
+				{
+					"id": "r310",
+					"name": "Yoshpet"
+				},
+				{
+					"id": "r311",
+					"name": "Inner Yoshpet"
+				},
+				{
+					"id": "r312",
+					"name": "Ark of Yamato - Yami Arena"
+				},
+				{
+					"id": "r313",
+					"name": "Wep'keer Square"
+				},
+				{
+					"id": "r314",
+					"name": "Wawku Shrine - Lechku and Nechku Arena"
+				}
+			]
+		},
+		{
+			"region": "std",
+			"maps": [
+				{
+					"id": "rd00",
+					"name": "dev-areas\\rd00"
+				},
+				{
+					"id": "rd01",
+					"name": "dev-areas\\rd01"
+				},
+				{
+					"id": "rd02",
+					"name": "dev-areas\\rd02"
+				},
+				{
+					"id": "rd03",
+					"name": "dev-areas\\rd03"
+				},
+				{
+					"id": "rd04",
+					"name": "dev-areas\\rd04"
+				},
+				{
+					"id": "rd05",
+					"name": "dev-areas\\rd05"
+				},
+				{
+					"id": "rd06",
+					"name": "dev-areas\\rd06"
+				},
+				{
+					"id": "rd07",
+					"name": "dev-areas\\rd07"
+				}
+			]
+		},
+		{
+			"region": "ste",
+			"maps": [
+				{
+					"id": "re00",
+					"name": "Sei'an Bridge Fishing"
+				},
+				{
+					"id": "re01",
+					"name": "Sei'an Aristocratic Quarter Fishing"
+				},
+				{
+					"id": "re02",
+					"name": "Agata Forest Fishing"
+				},
+				{
+					"id": "re03",
+					"name": "Kamui Fishing"
+				},
+				{
+					"id": "re04",
+					"name": "North Ryoshima Coast Fishing"
+				}
+			]
+		},
+		{
+			"region": "stf",
+			"maps": [
+				{
+					"id": "rf01",
+					"name": "Shinshu Field (Cursed)"
+				},
+				{
+					"id": "rf02",
+					"name": "Shinshu Field (Healed)"
+				},
+				{
+					"id": "rf03",
+					"name": "Agata Forest (Cursed)"
+				},
+				{
+					"id": "rf04",
+					"name": "Agata Forest (Healed)"
+				},
+				{
+					"id": "rf06",
+					"name": "Moon Cave Entrance"
+				},
+				{
+					"id": "rf07",
+					"name": "Taka Pass (Cursed)"
+				},
+				{
+					"id": "rf08",
+					"name": "Taka Pass (Healed)"
+				},
+				{
+					"id": "rf09",
+					"name": "Ryoshima Coast (Cursed)"
+				},
+				{
+					"id": "rf0a",
+					"name": "Ryoshima Coast (Healed)"
+				},
+				{
+					"id": "rf0c",
+					"name": "North Ryoshima Coast"
+				},
+				{
+					"id": "rf11",
+					"name": "Kamui (Cursed)"
+				},
+				{
+					"id": "rf12",
+					"name": "Kamui (Healed)"
+				},
+				{
+					"id": "rf13",
+					"name": "Kamui (Ezofuji)"
+				},
+				{
+					"id": "rf20",
+					"name": "Shinshu Field (Past)"
+				},
+				{
+					"id": "rf21",
+					"name": "Moon Cave Entrance (Past)"
+				}
+			]
+		}
+	],
 	"sources": [
 		{
-			"path": "F:\\okami\\st1\\r122.dat_dir\\r122.AKT",
-			"type": 0,
-			"material": 0
+			"archive": ".bin",
+			"files": [
+				{
+					"extension": ".MEH",
+					"type": 1
+				},
+				{
+					"extension": ".SCA",
+					"type": 1
+				}
+			]
 		},
 		{
-			"path": "F:\\okami\\st1\\r122.bin_dir\\r122.SCA",
-			"type": 1,
-			"material": 1
-		},
-		{
-			"path": "F:\\okami\\st1\\r122.bin_dir\\R122.MEH",
-			"type": 1,
-			"material": 1
-		},
-		{
-			"path": "F:\\okami\\st1\\r122.dat_dir\\r122.SCI",
-			"type": 1,
-			"material": 1
+			"archive": ".dat",
+			"files": [
+				{
+					"extension": ".AKT",
+					"type": 0
+				},
+				{
+					"extension": ".SCI",
+					"type": 1
+				}
+			]
 		}
 	]
 }

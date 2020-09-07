@@ -10,7 +10,7 @@
     0x30: Dev Area with Wheel Fights
     0x31: Dev Area with Bull Fights
     0x32: Dev Area with Cloud Overlaid
-    0x33: Dev Area with Cloud Overlaid
+    0x33: Dev Area with Cloud Overlaid2
     0x34: Dev Area with Blue Wall
     0xff: Super Cool Dev Area
   0x01:
@@ -58,9 +58,9 @@
     0x08: Lower Oni Island (Before Platforming)
     0x09: Ninetails Arena
     0x0a: Catcall Tower
-    0x0b: Inside the Emperor
+    0x0b: Inside the Emperor - Blight Arena
     0x0c: Sei'an Commoner's Quarter - Kimono Shop
-    0x0d: Oni Island Entry
+    0x0d: Oni Island Exterior
     0x0e: Upper Oni Island (After Platforming)
     0x0f: Oni Island Platforming
   0x03:
@@ -69,7 +69,7 @@
     0x03: Wawku Shrine
     0x04: Nechku Arena
     0x05: Ponc'tan
-    0x06: Moon Cave Entry (Past)
+    0x06: Moon Cave - Orochi Arena (Past)
     0x07: Ark of Yamato
     0x08: Spider Queen Arena (Ark)
     0x09: Orochi Arena (Ark)

@@ -18,7 +18,7 @@ class GLTF {
     GLTF();
     ~GLTF() {};
     int add_buffer(int len, std::string uri);
-    int add_bufferView(int buffer, int len, int offset=0);
+    int add_bufferView(int buffer, int len, int& offset);
     int add_mesh(std::string name, int pos, int norm, int ind, int mat=0);
     void add_node(int mesh, std::string name);
     void add_accessor_fv3(int view, int count);

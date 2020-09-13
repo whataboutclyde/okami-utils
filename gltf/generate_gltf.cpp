@@ -11,14 +11,18 @@
 #include <rapidjson/filereadstream.h>
 #include "wrappers/gltf_akt.h"
 #include "wrappers/gltf_zone.h"
+#include <okami-utils/model.h>
 #include "gltf.h"
 using namespace std;
 namespace fs = filesystem;
 namespace rj = rapidjson;
 
+#define FILELIST_NAME "filelist.lst"
+
 enum FILE_TYPE {
-  GLTFAKT_TYPE = 0,
-  ZONE_TYPE = 1
+  AKT_TYPE   = 0,
+  ZONE_TYPE  = 1,
+  SCP_TYPE   = 2   // Going to assume it's been unpacked for now anyway.
 };
 
 enum MATERIAL_TYPE {
@@ -40,6 +44,7 @@ struct GLTFSource {
   string archive;
   string extension;
   FILE_TYPE type;
+  bool unpacked;
 };
 
 struct GLTFConfig {
@@ -86,6 +91,10 @@ bool read_config(fs::path config, GLTFConfig& conf) {
       gs.archive = archive;
       gs.extension = sub[i]["extension"].GetString();
       gs.type = (FILE_TYPE)sub[i]["type"].GetInt();
+      if (sub[i].HasMember("unpacked"))
+        gs.unpacked = sub[i]["unpacked"].GetBool();
+      else
+        gs.unpacked = false;
       conf.sources.push_back(gs);
     }
   }
@@ -123,6 +132,7 @@ bool read_config(fs::path config, GLTFConfig& conf) {
 void add_akt(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
   OKAMI_UTILS::GLTFAKT akt;
   akt.parse_file(path);
+  int parent_node = gltf.add_parent_node("Collision");
 
   fs::path bin_short(path.filename());
   bin_short += ".bin";
@@ -143,9 +153,9 @@ void add_akt(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
     if (offset % 4 != 0)
       offset += 4-(offset%4);
 
-    string name = fmt::format("{}.AK.{:#02}", path.stem().string(), i);
-    int mesh_index = gltf.add_mesh(name, p, n, in, MATERIAL_COLLISION);
-    gltf.add_node(mesh_index, name);
+    string name = fmt::format("{}.AK.{:02x}", path.stem().string(), i);
+    int mesh_index = gltf.add_mesh(name, p, n, in, -1, -1, MATERIAL_COLLISION);
+    gltf.add_node(mesh_index, name, parent_node);
   }
 
   fs::path bin(out_dir);
@@ -162,6 +172,14 @@ void add_zone(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
   if (zone.size() == 0)
     return;
 
+  int file_parent_node = -1;
+  // Ideally I could have an array indexed with the enum, but then I need to know all the values...
+  // So for now we're doing it like this.
+  int exit_parent_node = -1;
+  int bit_flag_parent_node = -1;
+  int examine_parent_node = -1;
+  int indicator_parent_node = -1;
+
   fs::path bin_short(path.filename());
   bin_short += ".bin";
   int buffer = gltf.add_buffer(zone.get_gltf_buffer_size(), bin_short.string());
@@ -177,23 +195,46 @@ void add_zone(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
     offset += 4-(offset%4);
 
   for (int i=0; i<zone.size(); i++) {
+    int parent_node = file_parent_node;
     bool qp = zone.get(i).zone_shape == OKAMI_UTILS::ZONE_SHAPE_QUAD_PRISM;
     int pos_size = qp ? zone.get_gltf_quad_position_size() : zone.get_gltf_cyl_position_size();
     int p = gltf.add_bufferView(buffer, pos_size, offset);
     gltf.add_accessor_fv3(p, qp ? zone.num_quad_coordinates() : zone.num_cyl_coordinates(), zone.get_constraints(i));
 
     string name = fmt::format("{}.{:02x}", path.filename().string(), zone.get(i).effect_index);
-
+    cout << name << endl;
     int material = MATERIAL_UNKNOWN;
     switch (zone.get(i).entry_type) {
-      case OKAMI_UTILS::ZONE_BIT_FLAG_TYPE: material = MATERIAL_BIT_FLAG; break;
-      case OKAMI_UTILS::ZONE_EXIT_TYPE: material = MATERIAL_EXIT; break;
-      case OKAMI_UTILS::ZONE_EXAMINE_TYPE: material = MATERIAL_EXAMINE; break;
-      case OKAMI_UTILS::ZONE_ISSUN_INDICATOR_TYPE: material = MATERIAL_ISSUN_INDICATOR; break;
+      case OKAMI_UTILS::ZONE_BIT_FLAG_TYPE: 
+        material = MATERIAL_BIT_FLAG; 
+        if (bit_flag_parent_node == -1)
+          bit_flag_parent_node = gltf.add_parent_node("Bit Flag");
+        parent_node = bit_flag_parent_node;
+        break;
+      case OKAMI_UTILS::ZONE_EXIT_TYPE: 
+        if (exit_parent_node == -1)
+          exit_parent_node = gltf.add_parent_node("Exit");
+        parent_node = exit_parent_node;
+        material = MATERIAL_EXIT; 
+        break;
+      case OKAMI_UTILS::ZONE_EXAMINE_TYPE: 
+        material = MATERIAL_EXAMINE; 
+        if (examine_parent_node == -1)
+          examine_parent_node = gltf.add_parent_node("Examine");
+        parent_node = examine_parent_node;
+        break;
+      case OKAMI_UTILS::ZONE_ISSUN_INDICATOR_TYPE: 
+        material = MATERIAL_ISSUN_INDICATOR; 
+        if (indicator_parent_node == -1)
+          indicator_parent_node = gltf.add_parent_node("Indicator");
+        parent_node = indicator_parent_node;
+        break;
     }
 
-    int mesh_index = gltf.add_mesh(name, p, -1, qp ? qin : cin, material);
-    gltf.add_node(mesh_index, name);
+    int mesh_index = gltf.add_mesh(name, p, -1, qp ? qin : cin, -1, -1, material);
+    if (parent_node == -1)
+      parent_node = file_parent_node = gltf.add_parent_node(path.filename().string());
+    gltf.add_node(mesh_index, name, parent_node);
   }
 
   fs::path bin(out_dir);
@@ -202,6 +243,105 @@ void add_zone(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
   zone.dump_gltf_binary(fout);
   fout.close();
 }
+
+// int add_textures(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
+//   // First we need filelist to make sure they're in the right order...
+//   fs::path fl(path);
+//   fl /= FILELIST_NAME;
+
+//   int tex_offset = -1;
+//   string line;
+//   ifstream fin(fl, ios::in);
+//   getline(fin, line);
+//   int count = atoi(line.c_str());
+//   for (int i=0; i<count; i++) {
+//     getline(fin, line);
+//     if (line.rfind(".DDS") != string::npos) {
+//       int ai = gltf.add_image(line);
+//       gltf.add_texture(ai);
+//       if (i == 0)
+//         tex_offset = ai;
+//       fs::path from(path);
+//       from /= line;
+//       fs::path to(out_dir);
+//       to /= from.filename();
+//       //This is throwing errors if the files already exist and I don't want to deal with it right now.
+//       //fs::copy(from, to, fs::copy_options::update_existing);
+//     }
+//   }
+
+//   return tex_offset;
+// }
+
+// void add_scp(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
+//   int parent_node = gltf.add_parent_node("Scenery");
+//   fs::path scp_dir(path);
+//   scp_dir += "_dir";
+//   fs::path ddp_dir;
+
+//   for (auto const& entry : fs::directory_iterator(scp_dir)) {
+//     if (fs::is_directory(entry) && entry.path().extension() == ".DDP_dir") {
+//       ddp_dir = entry;
+//       break;
+//     }
+//   }
+
+//   int tex_offset = add_textures(gltf, ddp_dir, out_dir);
+
+//   fs::path bin(out_dir);
+//   bin /= path.filename();
+//   bin += ".bin";
+
+//   ofstream out_bin(bin, ios::out|ios::binary);
+
+//   // Going to change the buffer size once we're done...
+//   int buffer = gltf.add_buffer(1, bin.string());
+
+//   int offset = 0;
+//   // int count = 0;
+//   for (auto const& entry : fs::directory_iterator(scp_dir)) {
+//     if (fs::is_regular_file(entry) && entry.path().extension() == ".SCR") {
+//       // cout << count << endl;
+//       OKAMI_UTILS::Model m;
+      
+//       m.parse_file(entry);
+//       int model_node = gltf.add_parent_node(entry.path().filename().string(), parent_node);
+
+//       for (int j=0; j<m.submeshes.size(); j++) {
+//         string submesh_string = fmt::format("{}.{:02x}",entry.path().filename().string(),j);
+//         int submesh_node = gltf.add_parent_node(submesh_string, model_node);
+//         for (int k=0; k<m.submeshes[j].divisions.size(); k++) {
+//           string mdiv_string = fmt::format("{}.{:02x}", submesh_string, k);
+//           OKAMI_UTILS::MeshDivision& md = m.submeshes[j].divisions[k];
+//           int ind_size = md.get_gltf_indices_size();
+//           int ind = gltf.add_bufferView(buffer, ind_size, offset);
+//           gltf.add_accessor_uss(ind, md.num_indices());
+//           if (offset%4 != 0)
+//             offset += 4-(offset%4);
+//           int pos_size = md.get_gltf_vertices_size();
+//           int pos = gltf.add_bufferView(buffer, pos_size, offset);
+//           gltf.add_accessor_fv3(pos, md.num_coordinates());
+//           // int texc_size = md.get_gltf_itm_size();
+//           // int texc = gltf.add_bufferView(buffer, texc_size, offset);
+//           // gltf.add_accessor_ubv4(texc, md.num_coordinates());
+//           // int tcw_size = md.get_gltf_tcw_size();
+//           // int tcw = gltf.add_bufferView(buffer, tcw_size, offset);
+//           // gltf.add_accessor_ubv4(tcw, md.num_coordinates());
+//           //int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, texc, tcw, -1, md.header.texture_index);
+//           int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, -1, -1, MATERIAL_COLLISION, -1);
+//           gltf.add_node(mesh_index, mdiv_string, submesh_node);
+//         }
+//       }
+//       m.dump_gltf_binary(out_bin);
+//       // if (++count>1)
+//       //   break;
+//     }
+//   }
+
+//   // I hate I'm doing this.
+//   gltf.change_buffer_length(buffer, offset);
+//   out_bin.close();
+// }
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
@@ -247,8 +387,15 @@ int main(int argc, char* argv[]) {
       }
 
       switch (src->type) {
-        case GLTFAKT_TYPE:  add_akt(gltf, input_file, output_dir); break; // add_akt
+        case AKT_TYPE:  add_akt(gltf, input_file, output_dir); break; 
         case ZONE_TYPE: add_zone(gltf, input_file, output_dir); break;
+        // case SCP_TYPE:  
+        //   if (!src->unpacked) {
+        //     cerr << "I'm not supporting packed SCP right now because haha layered archives." << endl;
+        //     continue;
+        //   }
+        //   add_scp(gltf, input_file, output_dir); 
+        //   break;
         default: cerr << "Unknown source type: " << src->type << endl; continue;
       }
     }

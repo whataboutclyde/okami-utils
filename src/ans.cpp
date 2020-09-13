@@ -13,7 +13,7 @@ ANS::~ANS() {
   cleanup();
 }
 
-bool ANS::parse_file(ifstream& fin) {
+bool ANS::process_file(ifstream& fin) {
   ANS_ENTRY_COUNT_TYPE entry_count = 0;
   fin.seekg(0, ios::beg);
   fin.read(reinterpret_cast<char *>(&entry_count), sizeof(entry_count));
@@ -32,21 +32,7 @@ bool ANS::parse_file(ifstream& fin) {
   return true;
 }
 
-bool ANS::parse_file(char* path) {
-  cleanup();
-
-  ifstream fin(path, ios::in|ios::binary);
-  if (!fin.is_open()) {
-    cerr << "Couldn't open file " << path << endl;
-    return false;
-  }
-
-  bool ret = parse_file(fin);
-  fin.close();
-  return ret;
-}
-
-void ANS::write_file(ofstream& fout) {
+// void ANS::write_file(ofstream& fout) {
   // int file_size = sizeof(ANS_ENTRY_COUNT_TYPE) + (ANS_ENTRY_SIZE + ANS_ENTRY_PADDING_SIZE)*entries.size();
   // int padding = 32-(file_size % 32); // padding for 32 byte alignment.
   // char* pad_buffer = (char*)calloc(sizeof(uint8_t),padding > ANS_ENTRY_PADDING_SIZE ? padding : ANS_ENTRY_PADDING_SIZE);
@@ -60,9 +46,9 @@ void ANS::write_file(ofstream& fout) {
   // }
   // fout.write(pad_buffer, padding);
   // free(pad_buffer);
-}
+// }
 
-bool ANS::write_file(char* path) {
+// bool ANS::write_file(char* path) {
   // ofstream fout(path, ios::out|ios::binary);
   // if (!fout.is_open()) {
   //   cerr << "Couldn't open file " << path << endl;
@@ -71,8 +57,8 @@ bool ANS::write_file(char* path) {
   // write_file(fout);
   // fout.close();
   // return true;
-  return false;
-}
+//   return false;
+// }
 
 void ANS::cleanup() {
   groups.clear();

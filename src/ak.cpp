@@ -17,7 +17,11 @@ void AK::cleanup() {
   indices.clear();
 }
 
-bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
+bool AK::process_file(ifstream& fin) {
+  return process_file(fin, 0);
+}
+
+bool AK::process_file(ifstream& fin, uint32_t start_offset) {
   fin.read(reinterpret_cast<char*>(&header),sizeof(header));
 
   int green_count = (header.vector_normals_offset - header.indices_offset)/sizeof(AKIndicesEntry);
@@ -44,24 +48,6 @@ bool AK::parse_file(ifstream& fin, uint32_t start_offset = 0) {
   }
 
   return true;
-}
-
-bool AK::parse_file(fs::path path) {
-  cleanup();
-
-  ifstream fin(path, ios::in|ios::binary);
-  if (!fin.is_open()) {
-    cerr << "Couldn't open file " << path << endl;
-    return false;
-  }
-
-  bool ret = parse_file(fin);
-  fin.close();
-  return ret;
-}
-
-bool AK::parse_file(char* path) {
-  return parse_file(fs::path(path));
 }
 
 int AK::num_coordinates() {

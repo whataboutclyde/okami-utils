@@ -9,6 +9,9 @@ enum {
   SCENES_INDEX = 0,
   NODES_INDEX,
   MATERIALS_INDEX,
+  IMAGES_INDEX,
+  SAMPLERS_INDEX,
+  TEXTURES_INDEX,
   MESHES_INDEX,
   ACCESSORS_INDEX,
   BUFFERVIEWS_INDEX,
@@ -21,6 +24,9 @@ const char* GLTF::array_names[] = {
   "scenes",
   "nodes",
   "materials",
+  "images",
+  "samplers",
+  "textures",
   "meshes",
   "accessors",
   "bufferViews",
@@ -50,6 +56,15 @@ GLTF::GLTF() {
 
   Value& scenes = doc[array_names[SCENES_INDEX]];
   scenes.PushBack(scene, al);
+
+  // Set up one sampler unless I find out I need others...
+  Value sampler(kObjectType);
+  sampler.AddMember("magFilter", 9729, al);
+  sampler.AddMember("minFilter", 9987, al);
+  sampler.AddMember("wrapS", 10497, al);
+  sampler.AddMember("wrapT", 10497, al);
+  Value& samplers = doc[array_names[SAMPLERS_INDEX]];
+  samplers.PushBack(sampler, al);
 }
 
 int GLTF::add_buffer(int len, std::string uri="") {
@@ -62,6 +77,11 @@ int GLTF::add_buffer(int len, std::string uri="") {
   Value& buffers = doc[array_names[BUFFERS_INDEX]];
   buffers.PushBack(b, al);
   return buffers.Size()-1;
+}
+
+void GLTF::change_buffer_length(int buffer, int len) {
+  Value& b = doc[array_names[BUFFERS_INDEX]][buffer]["byteLength"];
+  b=len;
 }
 
 int GLTF::add_bufferView(int buffer, int len, int& offset) {
@@ -78,7 +98,7 @@ int GLTF::add_bufferView(int buffer, int len, int& offset) {
   return bufferViews.Size()-1;
 }
 
-int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int mat) {
+int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int itm, int tcw, int mat, int tex) {
   Value m(kObjectType);
   m.AddMember("name", name, al);
 
@@ -86,10 +106,20 @@ int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int mat) {
   attr.AddMember("POSITION", pos, al);
   if (norm != -1)
     attr.AddMember("NORMAL", norm, al);
+  if (itm != -1)
+    attr.AddMember("TEXCOORD_0", itm, al);
+  if (tcw != -1)
+    attr.AddMember("WEIGHTS_0", tcw, al);
   Value prim(kObjectType);
   prim.AddMember("attributes", attr, al);
   prim.AddMember("indices", ind, al);
-  prim.AddMember("material", mat, al);
+  if (mat != -1)
+    prim.AddMember("material", mat, al);
+  if (tex != -1) {
+    Value t(kObjectType);
+    t.AddMember("index", tex, al);   
+    prim.AddMember("textureInfo", t, al);
+  }
   Value p(kArrayType);
   p.PushBack(prim, al);
   m.AddMember("primitives", p, al);
@@ -99,7 +129,27 @@ int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int mat) {
   return meshes.Size()-1;
 }
 
-void GLTF::add_node(int mesh, std::string name) {
+int GLTF::add_parent_node(std::string name, int parent_node) {
+  Value n(kObjectType);
+  n.AddMember("name", name, al);
+  Value c(kArrayType);
+  n.AddMember("children", c, al);
+  Value &nodes = doc[array_names[NODES_INDEX]];
+  nodes.PushBack(n, al);
+
+  // Only one scene so adding to that scene's list of nodes.
+  Value& scene_nodes = doc[array_names[SCENES_INDEX]][0]["nodes"];
+  scene_nodes.PushBack(nodes.Size()-1, al);
+
+  if (parent_node >=0) {
+    Value& pn = doc[array_names[NODES_INDEX]][parent_node]["children"];
+    pn.PushBack(nodes.Size()-1, al);
+  }
+
+  return nodes.Size()-1;
+}
+
+void GLTF::add_node(int mesh, std::string name, int parent_node) {
   // Add to list of nodes
   Value n(kObjectType);
   n.AddMember("mesh", mesh, al);
@@ -109,7 +159,12 @@ void GLTF::add_node(int mesh, std::string name) {
 
   // Only one scene so adding to that scene's list of nodes.
   Value& scene_nodes = doc[array_names[SCENES_INDEX]][0]["nodes"];
-  scene_nodes.PushBack(mesh, al);
+  scene_nodes.PushBack(nodes.Size()-1, al);
+
+  if (parent_node >=0) {
+    Value& pn = doc[array_names[NODES_INDEX]][parent_node]["children"];
+    pn.PushBack(nodes.Size()-1, al);
+  }
 }
 
 void GLTF::add_accessor_fv3(int view, int count) {
@@ -147,6 +202,17 @@ void GLTF::add_accessor_fv3(int view, int count, FloatConstraints constraints) {
   accessors.PushBack(a, al);
 }
 
+void GLTF::add_accessor_ubv4(int view, int count) {
+  Value a(kObjectType);
+  a.AddMember("bufferView", view, al);
+  a.AddMember("componentType", 5121, al);
+  a.AddMember("count", count, al);
+  a.AddMember("type", "VEC4", al);
+
+  Value &accessors = doc[array_names[ACCESSORS_INDEX]];
+  accessors.PushBack(a, al);
+}
+
 void GLTF::add_accessor_uss(int view, int count) {
   Value a(kObjectType);
   a.AddMember("bufferView", view, al);
@@ -162,6 +228,25 @@ void GLTF::add_material(const Value& mat) {
   Value m(mat, al);
   Value& materials = doc[array_names[MATERIALS_INDEX]];
   materials.PushBack(m, al);
+}
+
+int GLTF::add_image(string path) {
+  Value i(kObjectType);
+  i.AddMember("uri", path, al);
+
+  Value &images = doc[array_names[IMAGES_INDEX]];
+  images.PushBack(i, al);
+
+  return images.Size()-1;
+}
+
+void GLTF::add_texture(int src) {
+  Value t(kObjectType);
+  t.AddMember("sampler", 0, al);
+  t.AddMember("source", src, al);
+
+  Value &textures = doc[array_names[TEXTURES_INDEX]];
+  textures.PushBack(t, al);
 }
 
 void GLTF::write(ofstream& fout) {

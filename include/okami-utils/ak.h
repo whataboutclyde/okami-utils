@@ -65,7 +65,7 @@ struct AKIndicesEntry {
 };
 #pragma pack(pop)
 
-class AK {
+class AK : public FileReader {
   private:
     void cleanup();
     // AKHeader header;
@@ -76,13 +76,8 @@ class AK {
     AK() {static_assert(sizeof(glm::vec3) == sizeof(float) * 3, "Platform doesn't support this directly.");};
     ~AK();
     AKHeader header;
-    bool parse_file(ifstream& fin, uint32_t start_offset);
-    bool parse_file(fs::path path);
-    bool parse_file(char* path);
-    // TODO: Add purple+blue to parsing so I can write separate .AK files.
-    // bool write_file(ofstream& fout);
-    // bool write_file(fs::path path);
-    // bool write_file(char* path);
+    bool process_file(ifstream& fin);
+    bool process_file(ifstream& fin, uint32_t start_offset=0);
     int num_coordinates();
     Int16Tuple* get_coordinates();
     FloatConstraints get_constraints();

@@ -30,7 +30,7 @@ struct ITSEntry {
 };
 #pragma pack(pop)
 
-class ITS {
+class ITS : FileReader {
   private:
     vector<ITSEntry> entries;
     void cleanup();
@@ -38,10 +38,9 @@ class ITS {
     ITS() {};
     ITS(char* path);
     ~ITS();
-    void parse_file(ifstream& fin);
-    bool parse_file(char* path);
-    void write_file(ofstream& fout);
-    bool write_file(char* path);
+    bool process_file(ifstream& fin);
+    // void write_file(ofstream& fout);
+    // bool write_file(char* path);
     int size();
     ITSEntry get(int i);
 }; // class ITS

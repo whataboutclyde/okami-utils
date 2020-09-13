@@ -46,7 +46,7 @@ struct ANSEntry {
 };
 #pragma pack(pop)
 
-class ANS {
+class ANS : public FileReader {
   private:
     list<uint8_t> group_ids;
     multimap<uint8_t, ANSEntry> groups;
@@ -56,10 +56,9 @@ class ANS {
     ANS() {};
     ANS(char* path);
     ~ANS();
-    bool parse_file(ifstream& fin);
-    bool parse_file(char* path);
-    void write_file(ofstream& fout);
-    bool write_file(char* path);
+    bool process_file(ifstream& fin);
+    // void write_file(ofstream& fout);
+    // bool write_file(char* path);
     int size();
     list<uint8_t> get_keys();
     vector<ANSEntry> get(uint8_t i);

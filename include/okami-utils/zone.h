@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <okami-utils/common.h>
 using namespace std;
 namespace fs = filesystem;
 
@@ -76,7 +77,7 @@ struct ZoneEntry {
 };
 #pragma pack(pop)
 
-class Zone {
+class Zone : public FileReader {
   protected:
     ZoneHeader header;
     vector<ZoneEntry> entries;
@@ -85,11 +86,7 @@ class Zone {
     Zone() {};
     Zone(char* path);
     ~Zone();
-    bool parse_file(ifstream& fin);
-    bool parse_file(fs::path path);
-    bool parse_file(char* path);
-    void write_file(ofstream& fout);
-    bool write_file(char* path);
+    bool process_file(ifstream& fin);
     int size();
     uint32_t file_type();
     ZoneEntry get(int i);

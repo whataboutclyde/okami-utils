@@ -34,7 +34,7 @@ struct OBJTBLEntry {
 };
 #pragma pack(pop)
 
-class OBJTBL {
+class OBJTBL : public FileReader {
   private:
     vector<OBJTBLEntry> entries;
     void cleanup();
@@ -42,10 +42,7 @@ class OBJTBL {
     OBJTBL() {};
     OBJTBL(char* path);
     ~OBJTBL();
-    void parse_file(ifstream& fin);
-    bool parse_file(char* path);
-    void write_file(ofstream& fout);
-    bool write_file(char* path);
+    bool process_file(ifstream& fin);
     int size();
     OBJTBLEntry get(int i);
 }; // class OBJTBL

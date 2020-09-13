@@ -2,7 +2,10 @@
 #define OKAMI_UTILS_COMMON_H
 
 #include <cstdint>
+#include <fstream>
+#include <filesystem>
 using namespace std;
+namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
@@ -50,6 +53,16 @@ struct FloatConstraints {
   float max_z;
 };
 #pragma pack(pop)
+
+class FileReader {
+  public:
+    FileReader() {};
+    ~FileReader() {};
+    virtual bool process_file(ifstream& fin) = 0;
+    virtual bool parse_file(fs::path path);
+    virtual bool parse_file(char* path);
+    virtual void align(ifstream& fin, int bytes);
+};
 
 } // namespace OKAMI_UTILS
 

@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
 
   char* path = argv[1];
   string path_string(path);
+
   // size_t ext_pos = path_string.rfind('.');
   // string region = path_string.substr(ext_pos-3, 1);
   // string area = path_string.substr(ext_pos-2, 2);

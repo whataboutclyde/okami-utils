@@ -18,7 +18,8 @@ target_link_libraries(print_its
   PRIVATE okami-utils
   PRIVATE yaml-cpp)
 target_link_libraries(parse_ect
-  PRIVATE okami-utils)
+  PRIVATE okami-utils
+  PRIVATE yaml-cpp)
 target_link_libraries(parse_zones
   PRIVATE okami-utils
   PRIVATE yaml-cpp)

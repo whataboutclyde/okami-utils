@@ -11,31 +11,7 @@ AKT::~AKT() {
   cleanup();
 }
 
-bool AKT::parse_file(char* path) {
-  return parse_file(fs::path(path));
-}
-
-bool AKT::parse_file(fs::path path) {
-  cleanup();
-
-  if (!fs::exists(path)) {
-    cerr << "File does not exist: " << path << endl;
-    return false;
-  }
-
-  ifstream fin(path, ios::in|ios::binary);
-  if (!fin.is_open()) {
-    cerr << "Couldn't open file " << path << endl;
-    return false;
-  }
-
-  bool ret = parse_file(fin);
-  fin.close();
-  return ret;
-}
-
-// TODO add error handling.
-bool AKT::parse_file(ifstream& fin) {
+bool AKT::process_file(ifstream& fin) {
   AKT_FILE_COUNT_TYPE file_count = 0;
   fin.read(reinterpret_cast<char *>(&file_count), sizeof(file_count));
 
@@ -47,7 +23,7 @@ bool AKT::parse_file(ifstream& fin) {
 
   for (int i = 0; i<data.size(); i++) {
     fin.seekg(data[i].offset, ios::beg);
-    data[i].ak.parse_file(fin, data[i].offset);
+    data[i].ak.process_file(fin, data[i].offset);
   }
 
   return true;

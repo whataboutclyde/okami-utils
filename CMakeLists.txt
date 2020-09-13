@@ -17,9 +17,13 @@ add_library(okami-utils STATIC
   src/ak.cpp  include/okami-utils/ak.h
   src/akt.cpp include/okami-utils/akt.h
   src/ans.cpp include/okami-utils/ans.h
+  src/archive.cpp include/okami-utils/archive.h
   src/ect.cpp include/okami-utils/ect.h
   src/its.cpp include/okami-utils/its.h
+  src/mesh_division.cpp include/okami-utils/mesh_division.h
+  src/model.cpp include/okami-utils/model.h
   src/objtbl.cpp include/okami-utils/objtbl.h
+  src/submesh.cpp include/okami-utils/submesh.h
   src/zone.cpp include/okami-utils/zone.h)
 target_include_directories(okami-utils PUBLIC include)
 target_link_libraries(okami-utils

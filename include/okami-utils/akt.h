@@ -7,6 +7,7 @@
 #include <vector>
 #include <filesystem>
 #include <okami-utils/ak.h>
+#include <okami-utils/common.h>
 using namespace std;
 namespace fs = filesystem;
 
@@ -21,7 +22,7 @@ struct AKTData {
     AK ak;
 };
 
-class AKT {
+class AKT : public FileReader {
   protected:
     static const string filelist_name;
     void cleanup();
@@ -29,9 +30,7 @@ class AKT {
   public:
     AKT() {};
     ~AKT();
-    bool parse_file(char* path);
-    bool parse_file(fs::path path);
-    bool parse_file(ifstream& fin);
+    bool process_file(ifstream& fin);
     int size();
     AK get(int i);
 }; // class AKT

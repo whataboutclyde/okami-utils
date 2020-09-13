@@ -21,9 +21,9 @@ struct OBJTBLEntry {
   uint8_t cat_id; // category id - which folder it comes from
   uint8_t unknown3; // 00, 10, 20, 30, 40, 50, 60, 70, 80, 90
   uint8_t unknown4; // always 00
-  UInt8Tuple size;
-  UInt8Tuple rotation;
-  Int16Tuple coordinates;
+  PackedTuple<uint8_t> size;
+  PackedTuple<uint8_t> rotation;
+  PackedTuple<int16_t> coordinates;
   uint32_t unknown5; // a lot of values, only first byte is used.
   uint32_t unknown6; // a lot of values, only first byte is used.
   uint8_t unknown7; // 00-0c

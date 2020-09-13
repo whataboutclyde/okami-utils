@@ -27,9 +27,9 @@ struct ANSEntry {
   uint8_t cat_id;   // category id; always 05
   uint8_t unknown2; // always 03
   uint8_t unknown3; // always 00
-  UInt8Tuple size;
-  UInt8Tuple rotation;
-  Int16Tuple coordinates;
+  PackedTuple<uint8_t> size;
+  PackedTuple<uint8_t> rotation;
+  PackedTuple<int16_t> coordinates;
   uint8_t unknown4; // 00-04, seems to affect animal texture used.
   uint8_t unknown5; // 00-08, 0f
   uint8_t group_id; // Offset for the group fed bit in memory starting at main.dll+B213AE bit 3? (First group is 03, at bit 6.)

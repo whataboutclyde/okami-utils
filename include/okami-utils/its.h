@@ -21,9 +21,9 @@ struct ITSEntry {
   uint8_t unknown1; // always 0a
   uint8_t unknown2; // always 01
   uint8_t container_state;
-  UInt8Tuple size;
-  UInt8Tuple rotation;
-  Int16Tuple coordinates;
+  PackedTuple<uint8_t> size;
+  PackedTuple<uint8_t> rotation;
+  PackedTuple<int16_t> coordinates;
   uint8_t container_type;
   uint8_t unknowns[NUM_UNKNOWNS];
   //ITSENTRY_PADDING_SIZE bytes padding, just fseek past it.

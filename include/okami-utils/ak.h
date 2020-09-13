@@ -69,8 +69,8 @@ class AK : public FileReader {
   private:
     void cleanup();
     // AKHeader header;
-    vector<Int16Tuple> coords;
-    vector<Int8Tuple> vector_normals;
+    vector<PackedTuple<int16_t>> coords;
+    vector<PackedTuple<int8_t>> vector_normals;
     vector<uint16_t> indices;
   public:
     AK() {static_assert(sizeof(glm::vec3) == sizeof(float) * 3, "Platform doesn't support this directly.");};
@@ -79,9 +79,9 @@ class AK : public FileReader {
     bool process_file(ifstream& fin);
     bool process_file(ifstream& fin, uint32_t start_offset=0);
     int num_coordinates();
-    Int16Tuple* get_coordinates();
+    PackedTuple<int16_t>* get_coordinates();
     FloatConstraints get_constraints();
-    Int8Tuple* get_vector_normals();
+    PackedTuple<int8_t>* get_vector_normals();
     int num_indices();
     int num_index_sets();
     uint16_t* get_index_sets();

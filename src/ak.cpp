@@ -35,14 +35,14 @@ bool AK::process_file(ifstream& fin, uint32_t start_offset) {
 
   fin.seekg(header.vector_normals_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
-    Int8Tuple vnentry;
+    PackedTuple<int8_t> vnentry;
     fin.read(reinterpret_cast<char*>(&vnentry), sizeof(vnentry));
     vector_normals.push_back(vnentry);
   }
 
   fin.seekg(header.coordinates_offset+start_offset, ios::beg);
   for (int i=0; i<header.coordinate_count; i++) {
-    Int16Tuple centry;
+    PackedTuple<int16_t> centry;
     fin.read(reinterpret_cast<char*>(&centry), sizeof(centry));
     coords.push_back(centry);
   }
@@ -54,7 +54,7 @@ int AK::num_coordinates() {
   return coords.size();
 }
 
-Int16Tuple* AK::get_coordinates() {
+PackedTuple<int16_t>* AK::get_coordinates() {
   return coords.data();
 }
 
@@ -69,7 +69,7 @@ FloatConstraints AK::get_constraints() {
   return constraints;
 }
 
-Int8Tuple* AK::get_vector_normals() {
+PackedTuple<int8_t>* AK::get_vector_normals() {
   return vector_normals.data();
 }
 
@@ -86,16 +86,16 @@ uint16_t* AK::get_index_sets() {
 }
 
 void AK::dump_gltf_binary(ofstream& fout) {
-  for (vector<Int16Tuple>::iterator it=coords.begin(); it!=coords.end(); it++) {
-    FloatTuple floats;
+  for (vector<PackedTuple<int16_t>>::iterator it=coords.begin(); it!=coords.end(); it++) {
+    PackedTuple<float> floats;
     floats.x = (float)it->x;
     floats.y = (float)it->y;
     floats.z = (float)it->z;
     fout.write(reinterpret_cast<char *>(&floats), sizeof(floats));
   }
   
-  for (vector<Int8Tuple>::iterator it=vector_normals.begin(); it!=vector_normals.end(); it++) {
-    FloatTuple floats;
+  for (vector<PackedTuple<int8_t>>::iterator it=vector_normals.begin(); it!=vector_normals.end(); it++) {
+    PackedTuple<float> floats;
     glm::vec3 stuff{glm::unpackSnorm1x8(it->x), glm::unpackSnorm1x8(it->y), glm::unpackSnorm1x8(it->z)};
     stuff=glm::normalize(stuff);
     floats.x = stuff.x;
@@ -116,7 +116,7 @@ void AK::dump_gltf_binary(ofstream& fout) {
 }
 
 int AK::get_gltf_position_size() {
-  return coords.size()*sizeof(FloatTuple);
+  return coords.size()*sizeof(PackedTuple<float>);
 }
 
 int AK::get_gltf_normal_size() {

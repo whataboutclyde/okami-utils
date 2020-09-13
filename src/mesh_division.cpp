@@ -130,7 +130,7 @@ void MeshDivision::dump_gltf_binary(ofstream& fout) {
   }
 
   for (vector<SCRVertex>::iterator it=vertices.begin(); it!=vertices.end(); it++) {
-    FloatTuple ft;
+    PackedTuple<float> ft;
     ft.x = it->coordinates.x;
     ft.y = it->coordinates.y;
     ft.z = it->coordinates.z;

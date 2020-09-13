@@ -25,7 +25,7 @@ struct MDHeader {
 
 #pragma pack(push, 1)
 struct SCRVertex {
-  Int16Tuple coordinates;
+  PackedTuple<int16_t> coordinates;
   uint16_t conn;
 };
 #pragma pack(pop)

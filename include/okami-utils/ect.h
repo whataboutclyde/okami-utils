@@ -24,7 +24,7 @@ struct EnemyEntry {
   uint8_t cat_id; // Always 02 (em folder).
   uint8_t unknowns[6];
   uint8_t total; // 00-0a, 0c, 0e
-  uint8_t max_per_wave; // 00-06, 08
+  uint8_t max_at_once; // 00-06, 08
   uint8_t unknown1; // always 00
   uint8_t unknown2; //always 0A in shinshu, else: 0d, 32, 3c
   uint8_t padding[12]; // always 00
@@ -33,7 +33,7 @@ struct EnemyEntry {
 
 #pragma pack(push, 1)
 struct ECTEntry {
-  Int16Tuple coordinates;
+  PackedTuple<int16_t> coordinates;
   uint8_t unknown1; // 00, 03-05, 07, 08, fe
   uint8_t escape_radius;
   uint8_t flags; // 01, 09, 11, 21, 61, 81, 83, 85, e1

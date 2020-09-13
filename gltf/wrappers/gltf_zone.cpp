@@ -135,43 +135,43 @@ void GLTFZone::dump_gltf_binary(ofstream& fout) {
 }
 
 void GLTFZone::dump_gltf_quad_coords(ofstream& fout, ZoneEntry entry) {
-  FloatTuple ft;
+  PackedTuple<float> ft;
   ft.y = entry.y;
   ft.x = entry.p1.x;
   ft.z = entry.p1.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p2.x;
   ft.z = entry.p2.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p3.x;
   ft.z = entry.p3.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p4.x;
   ft.z = entry.p4.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.y += entry.height;
   ft.x = entry.p1.x;
   ft.z = entry.p1.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p2.x;
   ft.z = entry.p2.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p3.x;
   ft.z = entry.p3.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.x = entry.p4.x;
   ft.z = entry.p4.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
 }
 
 void GLTFZone::dump_gltf_cyl_coords(ofstream& fout, ZoneEntry entry) {
-  FloatTuple ft;
+  PackedTuple<float> ft;
   ft.y = entry.y;
   ft.x = entry.p1.x;
   ft.z = entry.p1.z;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   ft.y = entry.y + entry.height;
-  fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+  fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
 
   float angle = 360.0f / ZONE_CYLINDER_SLICE_COUNT;
 
@@ -179,9 +179,9 @@ void GLTFZone::dump_gltf_cyl_coords(ofstream& fout, ZoneEntry entry) {
     ft.y = entry.y;
     ft.x = entry.p1.x + entry.radius * cos(angle*i*M_PI/180.f);
     ft.z = entry.p1.z + entry.radius * sin(angle*i*M_PI/180.f);
-    fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+    fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
     ft.y = entry.y+entry.height;
-    fout.write(reinterpret_cast<char*>(&ft), sizeof(FloatTuple));
+    fout.write(reinterpret_cast<char*>(&ft), sizeof(ft));
   }
 }
 

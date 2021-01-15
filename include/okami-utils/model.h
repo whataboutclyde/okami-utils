@@ -28,11 +28,20 @@ struct SCRHeader {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-struct SCREndStuff {
+struct SCRTransform {
   int16_t unknown1;
-  int16_t alwaysFFFF;
+  int16_t unknown2;
   uint32_t submesh_index;
-  uint32_t unknowns[11];
+  uint16_t unknown3;
+  uint16_t unknown4;
+  uint16_t unknown5;
+  uint16_t padding1[3]; // Always 00 00;
+  uint16_t unknown6;
+  uint16_t unknown7;
+  uint16_t padding2[5]; // Always 00 00;
+  PackedTuple<uint16_t> scale;
+  PackedTuple<int16_t> rotate;
+  PackedTuple<int16_t> translate;
 };
 #pragma pack(pop)
 
@@ -47,7 +56,7 @@ class Model : public FileReader {
   //private:
     SCRHeader header;
     vector<Submesh> submeshes;
-    vector<SCREndStuff> end_stuff;
+    vector<SCRTransform> transforms;
 };
 
 } // namespace OKAMI_UTILS

@@ -31,6 +31,7 @@ enum MATERIAL_TYPE {
   MATERIAL_BIT_FLAG,
   MATERIAL_EXAMINE,
   MATERIAL_ISSUN_INDICATOR,
+  MATERIAL_MODEL,
   MATERIAL_UNKNOWN
 };
 
@@ -102,7 +103,8 @@ bool read_config(fs::path config, GLTFConfig& conf) {
   rj::Value& levels = cd["levels"];
   for (int j=0; j<levels.Size(); j++) {
     fs::path region = conf.game_files;
-    region /= levels[j]["region"].GetString();
+    if (levels[j].HasMember("region"))
+      region /= levels[j]["region"].GetString();
     rj::Value& maps = levels[j]["maps"];
     for (int i=0; i<maps.Size(); i++) {
       GLTFLevel lvl;
@@ -131,6 +133,7 @@ bool read_config(fs::path config, GLTFConfig& conf) {
 
 void add_akt(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
   OKAMI_UTILS::GLTFAKT akt;
+  //cout << path << endl;
   akt.parse_file(path);
   int parent_node = gltf.add_parent_node("Collision");
 
@@ -202,7 +205,7 @@ void add_zone(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
     gltf.add_accessor_fv3(p, qp ? zone.num_quad_coordinates() : zone.num_cyl_coordinates(), zone.get_constraints(i));
 
     string name = fmt::format("{}.{:02x}", path.filename().string(), zone.get(i).effect_index);
-    cout << name << endl;
+    //cout << name << endl;
     int material = MATERIAL_UNKNOWN;
     switch (zone.get(i).entry_type) {
       case OKAMI_UTILS::ZONE_BIT_FLAG_TYPE: 
@@ -244,104 +247,132 @@ void add_zone(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
   fout.close();
 }
 
-// int add_textures(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
-//   // First we need filelist to make sure they're in the right order...
-//   fs::path fl(path);
-//   fl /= FILELIST_NAME;
+int add_textures(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
+  // First we need filelist to make sure they're in the right order...
+  fs::path fl(path);
+  fl /= FILELIST_NAME;
 
-//   int tex_offset = -1;
-//   string line;
-//   ifstream fin(fl, ios::in);
-//   getline(fin, line);
-//   int count = atoi(line.c_str());
-//   for (int i=0; i<count; i++) {
-//     getline(fin, line);
-//     if (line.rfind(".DDS") != string::npos) {
-//       int ai = gltf.add_image(line);
-//       gltf.add_texture(ai);
-//       if (i == 0)
-//         tex_offset = ai;
-//       fs::path from(path);
-//       from /= line;
-//       fs::path to(out_dir);
-//       to /= from.filename();
-//       //This is throwing errors if the files already exist and I don't want to deal with it right now.
-//       //fs::copy(from, to, fs::copy_options::update_existing);
-//     }
-//   }
+  int tex_offset = -1;
+  string line;
+  ifstream fin(fl, ios::in);
+  getline(fin, line);
+  int count = atoi(line.c_str());
+  for (int i=0; i<count; i++) {
+    getline(fin, line);
+    if (line.rfind(".DDS") != string::npos) {
+      int ai = gltf.add_image(line);
+      int mat = gltf.add_texture(ai, line);
+      if (i == 0)
+        tex_offset = mat;
+      fs::path from(path);
+      from /= line;
+      fs::path to(out_dir);
+      to /= from.filename();
+      //This is throwing errors if the files already exist and I don't want to deal with it right now.
+      //fs::copy(from, to, fs::copy_options::update_existing);
+    }
+  }
 
-//   return tex_offset;
-// }
+  return tex_offset;
+}
 
-// void add_scp(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
-//   int parent_node = gltf.add_parent_node("Scenery");
-//   fs::path scp_dir(path);
-//   scp_dir += "_dir";
-//   fs::path ddp_dir;
+void add_scp(OKAMI_UTILS::GLTF& gltf, fs::path path, fs::path out_dir) {
+  cout << path << endl;
+  int parent_node = gltf.add_parent_node("Scenery");
+  fs::path scp_dir(path);
+  scp_dir += "_dir";
+  fs::path ddp_dir;
 
-//   for (auto const& entry : fs::directory_iterator(scp_dir)) {
-//     if (fs::is_directory(entry) && entry.path().extension() == ".DDP_dir") {
-//       ddp_dir = entry;
-//       break;
-//     }
-//   }
+  for (auto const& entry : fs::directory_iterator(scp_dir)) {
+    if (fs::is_directory(entry) && entry.path().extension() == ".DDP_dir") {
+      ddp_dir = entry;
+      break;
+    }
+  }
 
-//   int tex_offset = add_textures(gltf, ddp_dir, out_dir);
+  int tex_offset = add_textures(gltf, ddp_dir, out_dir);
 
-//   fs::path bin(out_dir);
-//   bin /= path.filename();
-//   bin += ".bin";
+  fs::path bin(out_dir);
+  bin /= path.filename();
+  bin += ".bin";
 
-//   ofstream out_bin(bin, ios::out|ios::binary);
+  ofstream out_bin(bin, ios::out|ios::binary);
 
-//   // Going to change the buffer size once we're done...
-//   int buffer = gltf.add_buffer(1, bin.string());
+  // Going to change the buffer size once we're done...
+  int buffer = gltf.add_buffer(1, bin.filename().string());
 
-//   int offset = 0;
-//   // int count = 0;
-//   for (auto const& entry : fs::directory_iterator(scp_dir)) {
-//     if (fs::is_regular_file(entry) && entry.path().extension() == ".SCR") {
-//       // cout << count << endl;
-//       OKAMI_UTILS::Model m;
+  int offset = 0;
+  // int count = 0;
+  for (auto const& entry : fs::directory_iterator(scp_dir)) {
+    if (fs::is_regular_file(entry) && entry.path().extension() == ".SCR") {
+      cout << entry << endl;
+      // cout << count << endl;
+      OKAMI_UTILS::Model m;
       
-//       m.parse_file(entry);
-//       int model_node = gltf.add_parent_node(entry.path().filename().string(), parent_node);
+      m.parse_file(entry);
+      int model_node = gltf.add_parent_node(entry.path().filename().string(), parent_node);
 
-//       for (int j=0; j<m.submeshes.size(); j++) {
-//         string submesh_string = fmt::format("{}.{:02x}",entry.path().filename().string(),j);
-//         int submesh_node = gltf.add_parent_node(submesh_string, model_node);
-//         for (int k=0; k<m.submeshes[j].divisions.size(); k++) {
-//           string mdiv_string = fmt::format("{}.{:02x}", submesh_string, k);
-//           OKAMI_UTILS::MeshDivision& md = m.submeshes[j].divisions[k];
-//           int ind_size = md.get_gltf_indices_size();
-//           int ind = gltf.add_bufferView(buffer, ind_size, offset);
-//           gltf.add_accessor_uss(ind, md.num_indices());
-//           if (offset%4 != 0)
-//             offset += 4-(offset%4);
-//           int pos_size = md.get_gltf_vertices_size();
-//           int pos = gltf.add_bufferView(buffer, pos_size, offset);
-//           gltf.add_accessor_fv3(pos, md.num_coordinates());
-//           // int texc_size = md.get_gltf_itm_size();
-//           // int texc = gltf.add_bufferView(buffer, texc_size, offset);
-//           // gltf.add_accessor_ubv4(texc, md.num_coordinates());
-//           // int tcw_size = md.get_gltf_tcw_size();
-//           // int tcw = gltf.add_bufferView(buffer, tcw_size, offset);
-//           // gltf.add_accessor_ubv4(tcw, md.num_coordinates());
-//           //int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, texc, tcw, -1, md.header.texture_index);
-//           int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, -1, -1, MATERIAL_COLLISION, -1);
-//           gltf.add_node(mesh_index, mdiv_string, submesh_node);
-//         }
-//       }
-//       m.dump_gltf_binary(out_bin);
-//       // if (++count>1)
-//       //   break;
-//     }
-//   }
+      int submesh_nodes[m.size()];
 
-//   // I hate I'm doing this.
-//   gltf.change_buffer_length(buffer, offset);
-//   out_bin.close();
-// }
+      for (int j=0; j<m.submeshes.size(); j++) {
+        string submesh_string = fmt::format("{}.{:02x}",entry.path().filename().string(),j);
+        submesh_nodes[j] = gltf.add_parent_node(submesh_string, model_node);
+        for (int k=0; k<m.submeshes[j].divisions.size(); k++) {
+          string mdiv_string = fmt::format("{}.{:02x}", submesh_string, k);
+          OKAMI_UTILS::MeshDivision& md = m.submeshes[j].divisions[k];
+          int ind_size = md.get_gltf_indices_size();
+          int ind = gltf.add_bufferView(buffer, ind_size, offset);
+          gltf.add_accessor_uss(ind, md.num_indices());
+          if (offset%4 != 0)
+            offset += 4-(offset%4);
+          int pos_size = md.get_gltf_vertices_size();
+          int pos = gltf.add_bufferView(buffer, pos_size, offset);
+          gltf.add_accessor_fv3(pos, md.num_coordinates());
+          if (offset%4 != 0)
+            offset += 4-(offset%4);
+          int texc_size = md.get_gltf_itm_size();
+          int texc = gltf.add_bufferView(buffer, texc_size, offset);
+          gltf.add_accessor_ubv2(texc, md.num_coordinates());
+          if (offset%4 != 0)
+            offset += 4-(offset%4);
+          int tcw_size = md.get_gltf_tcw_size();
+          int tcw = gltf.add_bufferView(buffer, tcw_size, offset);
+          gltf.add_accessor_ubv4(tcw, md.num_coordinates());
+          if (offset%4 != 0)
+            offset += 4-(offset%4);
+          int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, texc, tcw, tex_offset+md.header.texture_index);
+          //int mesh_index = gltf.add_mesh(mdiv_string, pos, -1, ind, texc, tcw, MATERIAL_MODEL);
+          gltf.add_node(mesh_index, mdiv_string, submesh_nodes[j]);
+        }
+      }
+
+      for (int t=0; t<m.transforms.size(); t++) {
+        OKAMI_UTILS::PackedTuple<float> ft;
+        ft.x = m.transforms[t].scale.x;
+        ft.y = m.transforms[t].scale.y;
+        ft.z = m.transforms[t].scale.z;
+        gltf.scale_node(submesh_nodes[m.transforms[t].submesh_index], ft);
+        ft.x = m.transforms[t].rotate.x;
+        ft.y = m.transforms[t].rotate.y;
+        ft.z = m.transforms[t].rotate.z;
+        gltf.rotate_node(submesh_nodes[m.transforms[t].submesh_index], ft);
+        ft.x = m.transforms[t].translate.x;
+        ft.y = m.transforms[t].translate.y;
+        ft.z = m.transforms[t].translate.z;
+        gltf.translate_node(submesh_nodes[m.transforms[t].submesh_index], ft);
+      }
+        
+
+      m.dump_gltf_binary(out_bin);
+      // if (++count>1)
+      //   break;
+    }
+  }
+
+  // I hate I'm doing this.
+  gltf.change_buffer_length(buffer, offset);
+  out_bin.close();
+}
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
@@ -389,13 +420,13 @@ int main(int argc, char* argv[]) {
       switch (src->type) {
         case AKT_TYPE:  add_akt(gltf, input_file, output_dir); break; 
         case ZONE_TYPE: add_zone(gltf, input_file, output_dir); break;
-        // case SCP_TYPE:  
-        //   if (!src->unpacked) {
-        //     cerr << "I'm not supporting packed SCP right now because haha layered archives." << endl;
-        //     continue;
-        //   }
-        //   add_scp(gltf, input_file, output_dir); 
-        //   break;
+        case SCP_TYPE:  
+          if (!src->unpacked) {
+            cerr << "I'm not supporting packed SCP right now because haha layered archives." << endl;
+            continue;
+          }
+          add_scp(gltf, input_file, output_dir); 
+          break;
         default: cerr << "Unknown source type: " << src->type << endl; continue;
       }
     }

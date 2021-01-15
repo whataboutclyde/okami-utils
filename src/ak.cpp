@@ -31,6 +31,17 @@ bool AK::process_file(ifstream& fin, uint32_t start_offset) {
     fin.read(reinterpret_cast<char*>(&ientry), sizeof(ientry));
     for (int n=0; n<3; n++)
       indices.push_back(ientry.coord_index[n]);
+
+    // cout << "unknown0: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown0) << endl;
+    // cout << "unknown1: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown1) << endl;
+    // cout << "unknown2: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown2) << endl;
+    // cout << "unknown3: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown3) << endl;
+    // cout << "unknown4: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown4) << endl;
+    // cout << "unknown5: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown5) << endl;
+    // cout << "unknown6: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown6) << endl;
+    // cout << "unknown7: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown7) << endl;
+    // cout << "unknown8: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown8) << endl;
+    // cout << "unknown9: " << hex << setfill('0') << setw(2) << unsigned(ientry.unknown9) << endl;
   }
 
   fin.seekg(header.vector_normals_offset+start_offset, ios::beg);

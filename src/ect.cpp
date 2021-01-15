@@ -26,6 +26,22 @@ bool ECT::process_file(ifstream& fin) {
     // cout << "type: " << hex << setfill('0') << setw(2) << unsigned(entry.type) << endl;
     // cout << "index: " << hex << setfill('0') << setw(4) << unsigned(entry.index) << endl;
     // cout << "unknown3: " << hex << setfill('0') << setw(4) << unsigned(entry.unknown3) << endl;
+
+    // if (entry.flags.unknownb1o7==1) {
+    //   if (entry.flags.devil_gate)
+    //     cerr << "Gate" << endl;
+    //   else if (entry.flags.demon_scroll)
+    //     cerr << "Scroll" << endl;
+    //   else 
+    //     cerr << "idfk" << endl;
+    // }
+
+    if (!entry.flags.devil_gate && !entry.flags.demon_scroll && !entry.flags.inescapable2)
+      cerr << "huh?" << endl;
+
+    if (entry.flags.devil_gate && !entry.flags.inescapable2)
+      cerr << "WEIRD GATE" << endl;
+
     for (int i=0; i<4; i++) {
     //   cout << "enemy.enemy_id: " << hex << setfill('0') << setw(2) << unsigned(entry.enemy[i].enemy_id) << endl;
     //   cout << "enemy.cat_id: " << hex << setfill('0') << setw(2) << unsigned(entry.enemy[i].cat_id) << endl;
@@ -67,7 +83,7 @@ bool ECT::process_file(ifstream& fin) {
     }
   }
 
-  cout << dec << count << " entries." << endl;
+  //cout << dec << count << " entries." << endl;
 
   return true;
 }

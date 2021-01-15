@@ -27,10 +27,16 @@ bool Model::process_file(ifstream& fin) {
   }
 
   for (int i=0; i<header.end_entry_count; i++) {
-    SCREndStuff end;
+    SCRTransform end;
     fin.seekg(submesh_end_offsets[i], ios::beg);
     fin.read(reinterpret_cast<char*>(&end), sizeof(end));
-    end_stuff.push_back(end);
+    transforms.push_back(end);
+    // cout << "unknown1: " << hex << setfill('0') << setw(4) << end.unknown1 << endl;
+    // cout << "unknown2: " << hex << setfill('0') << setw(4) << end.unknown2 << endl;
+    if (end.submesh_index >= submeshes.size())
+      cout << "submesh_index: " << hex << setfill('0') << setw(8) << end.submesh_index << endl;
+    // for (int j=0; j<19; j++)
+    //   cout << "unknowns[" << dec << j << "]: " << hex << setfill('0') << setw(4) << end.unknowns[j] << endl;
   }
   free(submesh_end_offsets);
   return true;

@@ -1,6 +1,10 @@
 #ifndef OKAMI_UTILS_ZONE_H
 #define OKAMI_UTILS_ZONE_H
 
+// #ifndef OKAMI_PS2_BUILD
+// #define OKAMI_PS2_BUILD
+// #endif
+
 #include <cstdint>
 #include <vector>
 #include <fstream>
@@ -54,7 +58,11 @@ struct ZoneHeader {
 
 #pragma pack(push, 1)
 struct ZoneEntry {
+#ifdef OKAMI_PS2_BUILD
+    uint32_t pre_entry;
+#else
     uint64_t pre_entry;     // seems to always be all 00.
+#endif
     uint8_t always01;
     uint8_t zone_shape;
     uint8_t zero1;
@@ -73,7 +81,11 @@ struct ZoneEntry {
     uint8_t unknown4;
     uint8_t unknown5;
     uint8_t unknown6;
+#ifdef OKAMI_PS2_BUILD
+    uint8_t unknown_data[96];
+#else
     uint8_t unknown_data[112];
+#endif
 };
 #pragma pack(pop)
 

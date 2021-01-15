@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "gltf.h"
 using namespace rapidjson;
 
@@ -59,10 +61,10 @@ GLTF::GLTF() {
 
   // Set up one sampler unless I find out I need others...
   Value sampler(kObjectType);
-  sampler.AddMember("magFilter", 9729, al);
-  sampler.AddMember("minFilter", 9987, al);
-  sampler.AddMember("wrapS", 10497, al);
-  sampler.AddMember("wrapT", 10497, al);
+  sampler.AddMember("magFilter", 9728, al);
+  sampler.AddMember("minFilter", 9984, al);
+  sampler.AddMember("wrapS", 33071, al);
+  sampler.AddMember("wrapT", 33071, al);
   Value& samplers = doc[array_names[SAMPLERS_INDEX]];
   samplers.PushBack(sampler, al);
 }
@@ -98,7 +100,7 @@ int GLTF::add_bufferView(int buffer, int len, int& offset) {
   return bufferViews.Size()-1;
 }
 
-int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int itm, int tcw, int mat, int tex) {
+int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int itm, int tcw, int mat) {
   Value m(kObjectType);
   m.AddMember("name", name, al);
 
@@ -109,17 +111,12 @@ int GLTF::add_mesh(std::string name, int pos, int norm, int ind, int itm, int tc
   if (itm != -1)
     attr.AddMember("TEXCOORD_0", itm, al);
   if (tcw != -1)
-    attr.AddMember("WEIGHTS_0", tcw, al);
+    attr.AddMember("COLOR_0", tcw, al);
   Value prim(kObjectType);
   prim.AddMember("attributes", attr, al);
   prim.AddMember("indices", ind, al);
   if (mat != -1)
     prim.AddMember("material", mat, al);
-  if (tex != -1) {
-    Value t(kObjectType);
-    t.AddMember("index", tex, al);   
-    prim.AddMember("textureInfo", t, al);
-  }
   Value p(kArrayType);
   p.PushBack(prim, al);
   m.AddMember("primitives", p, al);
@@ -167,6 +164,35 @@ void GLTF::add_node(int mesh, std::string name, int parent_node) {
   }
 }
 
+void GLTF::scale_node(int node, PackedTuple<float> t) {
+  // Not actually sure what to do with this yet...
+  Value scale(kArrayType);
+  scale.PushBack(t.x/0x1000, al);
+  scale.PushBack(t.y/0x1000, al);
+  scale.PushBack(t.z/0x1000, al);
+  Value &n = doc[array_names[NODES_INDEX]][node];
+  n.AddMember("scale", scale, al);
+}
+
+void GLTF::translate_node(int node, PackedTuple<float> t) {
+  Value translate(kArrayType);
+  translate.PushBack(t.x, al);
+  translate.PushBack(t.y, al);
+  translate.PushBack(t.z, al);
+  Value &n = doc[array_names[NODES_INDEX]][node];
+  n.AddMember("translation", translate, al);
+}
+
+void GLTF::rotate_node(int node, PackedTuple<float> t) {
+  Value rotate(kArrayType);
+  rotate.PushBack(max(t.x/SHRT_MAX, -1.0f), al);
+  rotate.PushBack(max(t.y/SHRT_MAX, -1.0f), al);
+  rotate.PushBack(max(t.z/SHRT_MAX, -1.0f), al);
+  rotate.PushBack(1.0f, al);
+  Value &n = doc[array_names[NODES_INDEX]][node];
+  n.AddMember("rotation", rotate, al);
+}
+
 void GLTF::add_accessor_fv3(int view, int count) {
   Value a(kObjectType);
   a.AddMember("bufferView", view, al);
@@ -202,6 +228,17 @@ void GLTF::add_accessor_fv3(int view, int count, FloatConstraints constraints) {
   accessors.PushBack(a, al);
 }
 
+void GLTF::add_accessor_ubv2(int view, int count) {
+  Value a(kObjectType);
+  a.AddMember("bufferView", view, al);
+  a.AddMember("componentType", 5121, al);
+  a.AddMember("count", count, al);
+  a.AddMember("type", "VEC2", al);
+
+  Value &accessors = doc[array_names[ACCESSORS_INDEX]];
+  accessors.PushBack(a, al);
+}
+
 void GLTF::add_accessor_ubv4(int view, int count) {
   Value a(kObjectType);
   a.AddMember("bufferView", view, al);
@@ -224,10 +261,11 @@ void GLTF::add_accessor_uss(int view, int count) {
   accessors.PushBack(a, al);
 }
 
-void GLTF::add_material(const Value& mat) {
+int GLTF::add_material(const Value& mat) {
   Value m(mat, al);
   Value& materials = doc[array_names[MATERIALS_INDEX]];
   materials.PushBack(m, al);
+  return materials.Size()-1;
 }
 
 int GLTF::add_image(string path) {
@@ -240,13 +278,22 @@ int GLTF::add_image(string path) {
   return images.Size()-1;
 }
 
-void GLTF::add_texture(int src) {
+int GLTF::add_texture(int src, string line) {
   Value t(kObjectType);
   t.AddMember("sampler", 0, al);
   t.AddMember("source", src, al);
 
   Value &textures = doc[array_names[TEXTURES_INDEX]];
   textures.PushBack(t, al);
+
+  Value nt(kObjectType);
+  nt.AddMember("scale", 1, al);
+  nt.AddMember("index", textures.Size()-1, al);
+  nt.AddMember("texCoord", 0, al);
+  Value m(kObjectType);
+  m.AddMember("name", line, al);
+  m.AddMember("normalTexture", nt, al);
+  return add_material(m);
 }
 
 void GLTF::write(ofstream& fout) {

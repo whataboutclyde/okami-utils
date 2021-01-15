@@ -24,7 +24,6 @@ bool Zone::process_file(ifstream& fin) {
   for (int i=0; i<header.entry_count;i++) {
     ZoneEntry entry;
     fin.read(reinterpret_cast<char*>(&entry), ZONE_ENTRY_SIZE);
-
     entries.push_back(entry);
   }
 

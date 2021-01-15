@@ -12,6 +12,10 @@ namespace fs = filesystem;
 
 namespace OKAMI_UTILS {
 
+// #ifndef OKAMI_PS2_BUILD
+// #define OKAMI_PS2_BUILD
+// #endif
+
 #ifdef OKAMI_PS2_BUILD
 #define OFFSET_TYPE uint32_t
 #else
@@ -57,11 +61,23 @@ struct AKHeader {
 #pragma pack(push, 1)
 struct AKIndicesEntry {
   int16_t coord_index[3];
-  int16_t unknown1;
-  int16_t unknown2;
-  int16_t unknown3;
-  int16_t unknown4;
-  int16_t unknown5;
+  uint8_t unknown0; // At least partly which way you can pass through. Values 00-99
+  uint8_t unknown1; // 00, 01, 02, 04, 06, 08, 09
+  uint8_t unknown2; // 00, 01, 02, 20, 80, 84, 88, c0, c4, c8, d0
+  uint8_t unknown3o0 : 1; // 00, 01, 02, 04, 08, 10, 14, 20, 21, 30, 40, 41, 50, 60, 80, 90
+  uint8_t unknown3o1 : 1;
+  uint8_t unknown3o2 : 1;
+  uint8_t unknown3o3 : 1;
+  uint8_t ignore_touched : 1;
+  uint8_t damaging : 1;
+  uint8_t liquid : 1;
+  uint8_t void_out : 1;
+  uint8_t unknown4; // Bunch of values.
+  uint8_t unknown5; // 00-05, 07, 08, 10, 20, 40, 80, 81, 83
+  uint8_t unknown6; // At least partly terrain? 02 water, 04 holy smoke grass, 10 lava... 00-0a, 0c, 0d, 0f-16, 18, 1d - 80 lava, but 36 of 0d, 39 of 1d
+  uint8_t unknown7; // 00, 01, 02
+  uint8_t unknown8; // 00, 40, c0
+  uint8_t unknown9; // 00, 02, 04, 05, 08, 0a, 0c, 0e, 20, 40, 42, 4c, 60, 80, a0, e0
 };
 #pragma pack(pop)
 

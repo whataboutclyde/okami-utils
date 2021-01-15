@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
   for (int i=0;i<zone.size();i++) {
     OKAMI_UTILS::ZoneEntry entry = zone.get(i);
 
-    if (entry.pre_entry!=0)
-      cerr << "fuck not zero " << hex << entry.pre_entry << endl;
+    // if (entry.pre_entry!=0)
+    //   cerr << "fuck not zero " << hex << entry.pre_entry << endl;
 
     if (entry.always01 != 1)
       cerr << "always01: " << hex << unsigned(entry.always01) << " " << path << endl;

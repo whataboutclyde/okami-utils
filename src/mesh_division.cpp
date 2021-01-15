@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <okami-utils/mesh_division.h>
+#include <glm/gtc/packing.hpp>
 using namespace std;
 
 namespace OKAMI_UTILS {
@@ -26,7 +27,7 @@ bool MeshDivision::process_file(ifstream& fin) {
   if (header.itm_offset != 0) {
     fin.seekg(md_start+header.itm_offset, ios::beg);
     for (int i=0; i<header.vertices; i++) {
-      int32_t ie;
+      PackedPair<uint16_t> ie;
       fin.read(reinterpret_cast<char*>(&ie), sizeof(ie));
       itm.push_back(ie);
     }
@@ -44,7 +45,7 @@ bool MeshDivision::process_file(ifstream& fin) {
   if (header.tuv_offset != 0) {
     fin.seekg(md_start+header.tuv_offset, ios::beg);
     for (int i=0; i<header.vertices; i++) {
-      int32_t te;
+      PackedPair<uint16_t> te;
       fin.read(reinterpret_cast<char*>(&te), sizeof(te));
       tuv.push_back(te);
     }
@@ -66,9 +67,21 @@ int MeshDivision::get_gltf_buffer_size() {
   if (pad != 0)
     size += 4-pad;
   size += get_gltf_vertices_size();
-  // size += get_gltf_itm_size();
-  // size += get_gltf_tcw_size();
-  // size += get_gltf_tuv_size();
+  pad=size%4;
+  if (pad != 0)
+    size += 4-pad;
+  size += get_gltf_itm_size();
+  pad=size%4;
+  if (pad != 0)
+    size += 4-pad;
+  size += get_gltf_tcw_size();
+  pad=size%4;
+  if (pad != 0)
+    size += 4-pad;
+  size += get_gltf_tuv_size();
+  pad=size%4;
+  if (pad != 0)
+    size += 4-pad;
   return size;
 }
 
@@ -89,7 +102,7 @@ int MeshDivision::get_gltf_vertices_size() {
 }
 
 int MeshDivision::get_gltf_itm_size() {
-  return itm.size()*sizeof(uint32_t);
+  return itm.size()*sizeof(PackedPair<uint16_t>);
 }
 
 int MeshDivision::get_gltf_tcw_size() {
@@ -97,7 +110,7 @@ int MeshDivision::get_gltf_tcw_size() {
 }
 
 int MeshDivision::get_gltf_tuv_size() {
-  return tuv.size()*sizeof(uint32_t);
+  return tuv.size()*sizeof(PackedPair<uint16_t>);
 }
 
 void MeshDivision::build_indices() {
@@ -105,18 +118,17 @@ void MeshDivision::build_indices() {
   if (header.vertices < 3)
     return;
 
-  uint16_t last_conn = NOT_TRI_STRIP_CONN;
-  for (int i=2; i<header.vertices; i++) {
+  for (uint16_t i=2; i<header.vertices; i++) {
     // If this is a no tri strip marker and so was the last, skip forward.
-    if (vertices[i].conn == NOT_TRI_STRIP_CONN && vertices[i].conn == last_conn)
+    if (/*vertices[i].conn == NOT_TRI_STRIP_CONN &&*/ vertices[i].conn == NOT_TRI_STRIP_CONN)
       continue;
 
     indices.push_back(i-2);
     indices.push_back(i-1);
     indices.push_back(i);
-
-    last_conn = vertices[i].conn;
   }
+  
+  cout << indices.size() << endl;
 }
 
 void MeshDivision::dump_gltf_binary(ofstream& fout) {
@@ -129,22 +141,50 @@ void MeshDivision::dump_gltf_binary(ofstream& fout) {
       fout.put('\0');
   }
 
-  for (vector<SCRVertex>::iterator it=vertices.begin(); it!=vertices.end(); it++) {
+  for (int i=0; i<vertices.size(); i++) {
     PackedTuple<float> ft;
-    ft.x = it->coordinates.x;
-    ft.y = it->coordinates.y;
-    ft.z = it->coordinates.z;
+    ft.x = vertices[i].coordinates.x;
+    ft.y = vertices[i].coordinates.y;
+    ft.z = vertices[i].coordinates.z;
     fout.write(reinterpret_cast<char*>(&ft),sizeof(ft));
   }
 
-  // for (vector<uint32_t>::iterator it=itm.begin(); it!=itm.end(); it++)
-  //   fout.write(reinterpret_cast<char*>(&*it),sizeof(*it));
+  pad = fout.tellp()%4;
+  if (pad!=0) {
+    pad = 4-pad;
+    while (pad-- > 0)
+      fout.put('\0');
+  }
 
-  // for (vector<uint32_t>::iterator it=tcw.begin(); it!=tcw.end(); it++)
-  //   fout.write(reinterpret_cast<char*>(&*it),sizeof(*it));
+  for (vector<PackedPair<uint16_t>>::iterator it=itm.begin(); it!=itm.end(); it++)
+    fout.write(reinterpret_cast<char*>(&it->x),sizeof(it->x));
 
-  // for (vector<uint32_t>::iterator it=tuv.begin(); it!=tuv.end(); it++)
-  //   fout.write(reinterpret_cast<char*>(&*it),sizeof(*it));
+  pad = fout.tellp()%4;
+  if (pad!=0) {
+    pad = 4-pad;
+    while (pad-- > 0)
+      fout.put('\0');
+  }
+
+  for (vector<uint32_t>::iterator it=tcw.begin(); it!=tcw.end(); it++)
+    fout.write(reinterpret_cast<char*>(&*it),sizeof(*it));
+
+  pad = fout.tellp()%4;
+  if (pad!=0) {
+    pad = 4-pad;
+    while (pad-- > 0)
+      fout.put('\0');
+  }
+
+  for (vector<PackedPair<uint16_t>>::iterator it=tuv.begin(); it!=tuv.end(); it++)
+    fout.write(reinterpret_cast<char*>(&*it),sizeof(*it));
+
+  pad = fout.tellp()%4;
+  if (pad!=0) {
+    pad = 4-pad;
+    while (pad-- > 0)
+      fout.put('\0');
+  }
 }
 
 }

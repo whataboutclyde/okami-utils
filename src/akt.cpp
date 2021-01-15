@@ -23,6 +23,7 @@ bool AKT::process_file(ifstream& fin) {
 
   for (int i = 0; i<data.size(); i++) {
     fin.seekg(data[i].offset, ios::beg);
+    //cout << hex << setfill('0') << setw(2) << i << ".AK" << endl;
     data[i].ak.process_file(fin, data[i].offset);
   }
 

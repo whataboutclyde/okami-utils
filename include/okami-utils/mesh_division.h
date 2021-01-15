@@ -8,7 +8,7 @@ using namespace std;
 
 namespace OKAMI_UTILS {
 
-#define NOT_TRI_STRIP_CONN 0x8000
+#define NOT_TRI_STRIP_CONN (uint16_t)0x8000
 
 #pragma pack(push, 1)
 struct MDHeader {
@@ -49,9 +49,9 @@ class MeshDivision {
     MDHeader header;
     vector<SCRVertex> vertices;
     vector<int32_t> unknown1;
-    vector<uint32_t> itm;
+    vector<PackedPair<uint16_t>> itm;
     vector<uint32_t> tcw;
-    vector<uint32_t> tuv;
+    vector<PackedPair<uint16_t>> tuv;
     vector<uint16_t> indices;
 
     void build_indices();

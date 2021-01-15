@@ -1,5 +1,5 @@
 {
-	"output": "F:\\okami-collision-v5",
+	"output": "F:\\okami-collision-v6",
 	"gameFiles": "F:\\okami",
 	"materials": [
 		{
@@ -67,6 +67,20 @@
 					0.5,
 					0.0,
 					0.5
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0.5
+			}
+    },
+    {
+			"name": "Model",
+			"doubleSided": true,
+			"pbrMetallicRoughness": {
+				"baseColorFactor": [
+					0.164,
+					1.0,
+					0.35,
+					1.0
 				],
 				"metallicFactor": 0,
 				"roughnessFactor": 0.5
@@ -564,6 +578,11 @@
 				{
 					"extension": ".AKT",
 					"type": 0
+				},
+				{
+					"extension": ".SCP",
+					"type": 2,
+					"unpacked": true
 				},
 				{
 					"extension": ".SCI",

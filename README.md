@@ -22,6 +22,7 @@ The library currently supports the following file types:
 * its.h:      Loot objects on the map, e.g. chests, clams, pots with guaranteed contents.
 * model.h:    Level Model files (Need to add .md support) - submesh.h and mesh_division.h are used by this.
 * objtbl.h:   Objects placed around the map.
+* randtbl.h:  Drop tables.
 * zone.h:     Hitboxes for dialogues and some other things. (Includes .SCA, .MEH and .SCI files.)
 
 In many cases, there are portions of the file that are still unknown.

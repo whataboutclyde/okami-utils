@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
         cout << "unknowns[" << dec << n << "]: " << hex << setfill('0') << setw(2) << unsigned(entry.unknowns[n]) << endl;
     }
 
-    // Use this if I want to filter by commenting out stuff in the yaml files.
+    //Use this if I want to filter by commenting out stuff in the yaml files.
     // if (!boxes[entry.container_type] || !items[entry.contents_id])
     //   continue;
 

@@ -23,6 +23,7 @@ add_library(okami-utils STATIC
   src/mesh_division.cpp include/okami-utils/mesh_division.h
   src/model.cpp include/okami-utils/model.h
   src/objtbl.cpp include/okami-utils/objtbl.h
+  src/randtbl.cpp include/okami-utils/randtbl.h
   src/submesh.cpp include/okami-utils/submesh.h
   src/zone.cpp include/okami-utils/zone.h)
 target_include_directories(okami-utils PUBLIC include)
